@@ -177,6 +177,37 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
 .neg { color: var(--bad); font-weight: 800; }
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-weight: 700; z-index: 20; box-shadow: var(--shadow); }
 .check { display: flex; gap: 8px; align-items: center; font-weight: 700; font-size: .9rem; }
+/* vendas / relatórios */
+.periodos { display: flex; gap: 6px; flex-wrap: wrap; }
+.periodos button { border: 0; background: var(--surface-2); color: var(--muted); border-radius: 999px; padding: .4em .95em; font-weight: 700; font-size: .88rem; cursor: pointer; }
+.periodos button[aria-pressed="true"] { background: var(--brand); color: #fff6ea; }
+.kpis { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 760px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.kpi { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 16px; display: grid; gap: 2px; min-width: 0; }
+.kpi span { color: var(--muted); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.kpi b { font: 700 1.45rem/1.15 var(--display); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.kpi small { color: var(--muted); font-size: .8rem; }
+.kpi--destaque { background: var(--brand); }
+.kpi--destaque span, .kpi--destaque small, .kpi--destaque b { color: #fff6ea; }
+.grafico { position: relative; }
+.grafico svg { display: block; width: 100%; height: auto; overflow: visible; }
+.grafico .eixo { fill: var(--muted); font: 600 11px var(--body); }
+.grafico .grade { stroke: var(--line); stroke-width: 1; }
+.grafico .barra-v { fill: var(--brand); }
+.grafico .alvo { fill: transparent; cursor: pointer; }
+.grafico .alvo:hover + .barra-v, .grafico .alvo:focus + .barra-v { fill: var(--fg); }
+.dica { position: absolute; pointer-events: none; background: var(--fg); color: var(--bg); padding: 6px 10px; border-radius: 10px; font-size: .82rem; font-weight: 700; white-space: nowrap; transform: translate(-50%, calc(-100% - 8px)); z-index: 2; box-shadow: var(--shadow); }
+.dica small { display: block; font-weight: 600; opacity: .8; }
+.hbarras { display: grid; gap: 10px; }
+.hbarra { display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .9rem; }
+.hbarra__nome { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+.hbarra__trilho { height: 14px; background: var(--surface-2); border-radius: 0 4px 4px 0; overflow: hidden; }
+.hbarra__trilho i { display: block; height: 100%; background: var(--brand); border-radius: 0 4px 4px 0; }
+.hbarra__val { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; white-space: nowrap; }
+.hbarra__val small { color: var(--muted); font-weight: 600; }
+.venda-total { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); font-weight: 700; }
+.venda-total b { font: 700 1.5rem var(--display); color: var(--brand); font-variant-numeric: tabular-nums; }
 /* login */
 .entrada { min-height: 100vh; display: grid; place-items: center; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); background: var(--brand); }
 .entrada__caixa { width: min(400px, 100%); background: var(--surface); border-radius: 24px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.5); padding: 28px 24px; display: grid; gap: 14px; }
@@ -219,6 +250,7 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
       <div class="acoes">
         <span class="usuario"><span id="quem"></span><button type="button" id="b-sair">Sair</button></span>
         <button class="btn btn--claro" id="b-producao" type="button">🍪 Registrar fornada</button>
+        <button class="btn btn--claro" id="b-venda" type="button">💰 Registrar venda</button>
         <button class="btn btn--claro" id="b-compra" type="button">🛒 Registrar compra</button>
       </div>
     </div>
@@ -226,6 +258,7 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
       <a href="#painel" data-aba="painel">Painel</a>
       <a href="#estoque" data-aba="estoque">Estoque</a>
       <a href="#receitas" data-aba="receitas">Receitas e custos</a>
+      <a href="#vendas" data-aba="vendas">Vendas</a>
       <a href="#historico" data-aba="historico">Histórico</a>
     </nav>
   </div>
@@ -280,6 +313,43 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
     </div>
   </section>
 
+  <!-- VENDAS -->
+  <section class="vista" id="v-vendas" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="periodos" id="periodos" role="group" aria-label="Período">
+        <button type="button" data-p="7" aria-pressed="false">7 dias</button>
+        <button type="button" data-p="30" aria-pressed="true">30 dias</button>
+        <button type="button" data-p="90" aria-pressed="false">90 dias</button>
+        <button type="button" data-p="mes" aria-pressed="false">Este mês</button>
+        <button type="button" data-p="ano" aria-pressed="false">Este ano</button>
+      </div>
+      <span class="sub" id="periodo-txt" style="margin:0"></span>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="cartao">
+      <h2 id="g-tempo-titulo">Faturamento</h2>
+      <p class="sub" id="g-tempo-sub">Vendas pagas e a receber, por período.</p>
+      <div class="grafico" id="g-tempo"><p class="vazio">Carregando…</p></div>
+    </div>
+    <div class="grade2">
+      <div class="cartao">
+        <h2>Cookies vendidos por sabor</h2>
+        <p class="sub">Quantidade e participação no período.</p>
+        <div class="hbarras" id="g-sabor"></div>
+      </div>
+      <div class="cartao">
+        <h2>Faturamento por canal</h2>
+        <p class="sub">De onde vêm as vendas.</p>
+        <div class="hbarras" id="g-canal"></div>
+      </div>
+    </div>
+    <div class="cartao">
+      <h2>Vendas do período</h2>
+      <p class="sub">Toque em "a receber" para marcar como pago.</p>
+      <div class="rolagem" id="lista-vendas"></div>
+    </div>
+  </section>
+
   <!-- HISTÓRICO -->
   <section class="vista" id="v-historico" hidden>
     <div class="cartao">
@@ -314,7 +384,7 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
   const slug = (t) => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "insumo";
   const CAT = { ingrediente: "Ingrediente", embalagem: "Embalagem", custo: "Gás e energia" };
 
-  const S = { ins: {}, fichas: null, movs: [], okIns: false, okFic: false, db: null, podeEscrever: true, filtro: "todos", draft: null, sujo: false };
+  const S = { vendas: [], periodo: "30", ins: {}, fichas: null, movs: [], okIns: false, okFic: false, db: null, podeEscrever: true, filtro: "todos", draft: null, sujo: false };
 
   function fq(v, u) {
     v = Number(v) || 0;
@@ -361,7 +431,7 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
 
   // ---------- render ----------
   function render() {
-    renderPainel(); renderEstoque(); renderHistorico();
+    renderPainel(); renderEstoque(); renderHistorico(); renderVendas();
     if (!S.sujo) renderFicha();
   }
 
@@ -424,7 +494,7 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
     const box = $("#historico");
     if (!S.okIns) return;
     if (!S.movs.length) { box.innerHTML = `<p class="vazio">Nada registrado ainda. Use <b>Registrar fornada</b> ou <b>Registrar compra</b>.</p>`; return; }
-    const tipo = { producao: ["Fornada", "ok"], compra: ["Compra", "warn"], ajuste: ["Contagem", "neutro"] };
+    const tipo = { producao: ["Fornada", "ok"], compra: ["Compra", "warn"], ajuste: ["Contagem", "neutro"], venda: ["Venda", "ok"] };
     box.innerHTML = S.movs.map((m) => {
       const d = new Date(m.quando), t = tipo[m.tipo] || [m.tipo, "neutro"];
       const det = (m.itens || []).slice(0, 6).map((it) => `${esc(it.nome)} ${it.delta > 0 ? "+" : ""}${fq(it.delta, it.unidade)}`).join(" · ") + ((m.itens || []).length > 6 ? " …" : "");
@@ -574,7 +644,8 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
     abrir(`<h2>Registrar fornada</h2>
       <p class="sub" style="margin:0">Quantos cookies saíram? O estoque baixa automaticamente pela receita.</p>
       <div class="campos">${F.produtos.map((p) => `<label class="campo">${esc(p.nome)}<input type="number" min="0" step="1" id="q-${esc(p.id)}" value="0"></label>`).join("")}
-        <label class="campo">Pedidos entregues (sacolinhas)<input type="number" min="0" step="1" id="q-pedidos" value="0"></label></div>
+      </div>
+      <p class="sub" style="margin:0">A embalagem de entrega (sacolinha, lacre) baixa quando você registra a venda.</p>
       <div class="previa" id="previa"></div>
       <div class="dlg__rodape"><button class="btn btn--linha" data-fechar type="button">Cancelar</button><button class="btn btn--marca" type="submit" id="ok-prod">Baixar do estoque</button></div>`,
     async () => {
@@ -596,7 +667,7 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
     });
     function lerProd() {
       const qtds = {}; F.produtos.forEach((p) => (qtds[p.id] = Math.max(0, Math.round(num($("#q-" + CSS.escape(p.id))?.value)))));
-      return { qtds, ped: Math.max(0, Math.round(num($("#q-pedidos")?.value))) };
+      return { qtds, ped: 0 };
     }
   });
 
@@ -682,14 +753,190 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
     });
   }
 
+  // ---------- vendas ----------
+  const CANAIS = ["WhatsApp", "Instagram", "Empresa / evento", "Feira", "Retirada / balcão", "Outro"];
+  const PAGTOS = ["Pix", "Dinheiro", "Cartão", "A combinar"];
+  function hojeISO(diasOff = 0) { const d = new Date(); d.setDate(d.getDate() + diasOff); return d.toLocaleDateString("sv-SE"); }
+  const dataBR = (iso) => { const [y, m, d] = String(iso).split("-"); return `${d}/${m}/${y}`; };
+  const custoCookie = (p) => custoMapa(consumoCookie(p));
+
+  $("#b-venda").addEventListener("click", () => {
+    const F = S.fichas;
+    if (!S.vendasOk) { toast("Falta ativar as vendas no banco (script 002-vendas.sql)"); return; }
+    if (!F || !(F.produtos || []).length) { toast("Cadastre as receitas primeiro"); location.hash = "receitas"; return; }
+    abrir(`<h2>Registrar venda</h2>
+      <div class="campos">${F.produtos.map((p) => `<label class="campo">${esc(p.nome)} <small>${brl(p.preco)}</small><input type="number" min="0" step="1" id="v-${esc(p.id)}" value="0"></label>`).join("")}</div>
+      <div class="campos">
+        <label class="campo">Data<input type="date" id="v-data" value="${hojeISO()}"></label>
+        <label class="campo">Canal<select id="v-canal">${CANAIS.map((c) => `<option>${c}</option>`).join("")}</select></label>
+        <label class="campo">Pagamento<select id="v-pag">${PAGTOS.map((c) => `<option>${c}</option>`).join("")}</select></label>
+        <label class="campo">Situação<select id="v-status"><option value="pago">Pago</option><option value="a receber">A receber</option></select></label>
+      </div>
+      <div class="campos">
+        <label class="campo">Cliente (opcional)<input id="v-cliente" placeholder="Nome ou empresa"></label>
+        <label class="campo">Desconto (R$)<input id="v-desc" inputmode="decimal" placeholder="0,00"></label>
+      </div>
+      <label class="campo">Observação (opcional)<input id="v-obs" placeholder="Ex.: entrega no sábado"></label>
+      <label class="check"><input type="checkbox" id="v-emb" checked> Baixar a embalagem do pedido do estoque (sacolinha, lacre…)</label>
+      <div class="venda-total"><span id="v-resumo">0 cookies</span><b id="v-total">R$ 0,00</b></div>
+      <div class="dlg__rodape"><button class="btn btn--linha" data-fechar type="button">Cancelar</button><button class="btn btn--marca" type="submit">Salvar venda</button></div>`,
+    async () => {
+      const r = lerVenda();
+      if (!r.qtd) { toast("Informe ao menos um cookie"); return false; }
+      if (r.total < 0) { toast("O desconto é maior que o valor da venda"); return false; }
+      const custoEmb = r.emb ? custoMapa(consumoTotal({}, 1)) : 0;
+      await ok(sb.from("vendas").insert({
+        data: $("#v-data").value || hojeISO(), cliente: $("#v-cliente").value.trim(), canal: $("#v-canal").value,
+        pagamento: $("#v-pag").value, status: $("#v-status").value, obs: $("#v-obs").value.trim(),
+        itens: r.itens, subtotal: r.sub, desconto: r.desc, total: r.total,
+        custo: Math.round((r.itens.reduce((s, i) => s + i.custo * i.qtd, 0) + custoEmb) * 100) / 100,
+      }));
+      if (r.emb && (F.porPedido || []).length) {
+        const m = consumoTotal({}, 1);
+        await aplicarDeltas(Object.fromEntries(Object.entries(m).map(([k, v]) => [k, -v])),
+          { tipo: "venda", descricao: `Embalagem do pedido${$("#v-cliente").value.trim() ? " · " + $("#v-cliente").value.trim() : ""}`, valor: Math.round(custoEmb * 100) / 100 });
+      } else await carregar();
+      toast("Venda registrada");
+    }, () => {
+      const r = lerVenda();
+      $("#v-resumo").textContent = `${r.qtd} cookie${r.qtd === 1 ? "" : "s"}${r.desc ? " · desconto " + brl(r.desc) : ""}`;
+      $("#v-total").textContent = brl(r.total);
+    });
+    function lerVenda() {
+      const itens = F.produtos.map((p) => ({ produto: p.id, nome: p.nome, qtd: Math.max(0, Math.round(num($("#v-" + CSS.escape(p.id))?.value))), preco: num(p.preco), custo: Math.round(custoCookie(p) * 100) / 100 })).filter((i) => i.qtd);
+      const sub = itens.reduce((s, i) => s + i.qtd * i.preco, 0), desc = Math.max(0, num($("#v-desc")?.value));
+      return { itens, sub, desc, total: Math.round((sub - desc) * 100) / 100, qtd: itens.reduce((s, i) => s + i.qtd, 0), emb: $("#v-emb")?.checked };
+    }
+  });
+
+  function periodoAtual() {
+    const p = S.periodo, hoje = hojeISO();
+    if (p === "mes") return { ini: hoje.slice(0, 8) + "01", fim: hoje, nome: "este mês" };
+    if (p === "ano") return { ini: hoje.slice(0, 5) + "01-01", fim: hoje, nome: "este ano" };
+    return { ini: hojeISO(-(Number(p) - 1)), fim: hoje, nome: `últimos ${p} dias` };
+  }
+  function diasEntre(a, b) { return Math.round((new Date(b + "T12:00") - new Date(a + "T12:00")) / 864e5) + 1; }
+
+  function renderVendas() {
+    if (!S.okIns || $("#v-vendas").hidden) return;
+    if (!S.vendasOk) {
+      $("#kpis").innerHTML = ""; $("#g-sabor").innerHTML = ""; $("#g-canal").innerHTML = ""; $("#lista-vendas").innerHTML = "";
+      $("#g-tempo").innerHTML = `<p class="vazio">As vendas ainda não foram ativadas no banco. Rode o script <b>supabase/002-vendas.sql</b> no Supabase (SQL Editor) e recarregue.</p>`;
+      return;
+    }
+    const P = periodoAtual();
+    const vs = S.vendas.filter((v) => v.data >= P.ini && v.data <= P.fim);
+    $("#periodo-txt").textContent = `${dataBR(P.ini)} a ${dataBR(P.fim)}`;
+    const fat = vs.reduce((s, v) => s + v.total, 0), custo = vs.reduce((s, v) => s + v.custo, 0);
+    const cookies = vs.reduce((s, v) => s + (v.itens || []).reduce((t, i) => t + Number(i.qtd), 0), 0);
+    const receber = vs.filter((v) => v.status === "a receber").reduce((s, v) => s + v.total, 0);
+    const lucro = fat - custo, mg = fat > 0 ? lucro / fat * 100 : 0;
+    const kpi = (t, v, sub, dest) => `<div class="kpi${dest ? " kpi--destaque" : ""}"><span>${t}</span><b>${v}</b>${sub ? `<small>${sub}</small>` : ""}</div>`;
+    $("#kpis").innerHTML = [
+      kpi("Faturamento", brl(fat), P.nome, true),
+      kpi("Pedidos", nf(vs.length), vs.length ? `${nf(vs.length / diasEntre(P.ini, P.fim) * 7, 1)} por semana` : ""),
+      kpi("Ticket médio", brl(vs.length ? fat / vs.length : 0), "por pedido"),
+      kpi("Cookies vendidos", nf(cookies), vs.length ? `${nf(cookies / vs.length, 1)} por pedido` : ""),
+      kpi("Lucro estimado", brl(lucro), fat ? `margem de ${nf(mg, 0)}%` : "receita − custo dos insumos"),
+      kpi("A receber", brl(receber), receber ? `${vs.filter((v) => v.status === "a receber").length} pedido(s)` : "tudo pago"),
+    ].join("");
+
+    // faturamento no tempo (barras verticais, uma cor)
+    const n = diasEntre(P.ini, P.fim), passo = n <= 31 ? "dia" : n <= 120 ? "semana" : "mes";
+    const buckets = [], idx = {};
+    const chave = (iso) => {
+      if (passo === "dia") return iso;
+      if (passo === "mes") return iso.slice(0, 7);
+      const d = new Date(iso + "T12:00"); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return d.toLocaleDateString("sv-SE");
+    };
+    for (let d = new Date(P.ini + "T12:00"); d <= new Date(P.fim + "T12:00"); d.setDate(d.getDate() + 1)) {
+      const k = chave(d.toLocaleDateString("sv-SE")); if (idx[k] == null) { idx[k] = buckets.length; buckets.push({ k, v: 0, n: 0 }); }
+    }
+    vs.forEach((v) => { const b = buckets[idx[chave(v.data)]]; if (b) { b.v += v.total; b.n++; } });
+    $("#g-tempo-titulo").textContent = `Faturamento por ${passo === "mes" ? "mês" : passo}`;
+    $("#g-tempo").innerHTML = vs.length ? graficoBarras(buckets, passo) : `<p class="vazio">Nenhuma venda em ${P.nome}. Use <b>💰 Registrar venda</b> no topo.</p>`;
+
+    // por sabor e por canal
+    const porSabor = {}, porCanal = {};
+    vs.forEach((v) => { (v.itens || []).forEach((i) => { porSabor[i.nome] = (porSabor[i.nome] || 0) + Number(i.qtd); }); porCanal[v.canal] = (porCanal[v.canal] || 0) + v.total; });
+    $("#g-sabor").innerHTML = hbarras(porSabor, (x) => `${nf(x)} un`, cookies);
+    $("#g-canal").innerHTML = hbarras(porCanal, brl, fat);
+
+    // lista
+    $("#lista-vendas").innerHTML = vs.length ? `<table><thead><tr><th>Data</th><th>Cliente</th><th>Canal</th><th class="dir">Cookies</th><th class="dir">Total</th><th>Situação</th><th></th></tr></thead><tbody>${
+      vs.map((v) => `<tr><td class="num">${dataBR(v.data)}</td><td>${esc(v.cliente || "—")}</td><td>${esc(v.canal)}</td>
+        <td class="dir num">${nf((v.itens || []).reduce((t, i) => t + Number(i.qtd), 0))}</td><td class="dir num"><b>${brl(v.total)}</b></td>
+        <td>${v.status === "a receber" ? `<button class="chip chip--warn" style="border:0;cursor:pointer" data-pagar="${esc(v.id)}">a receber</button>` : `<span class="chip chip--ok">pago</span>`}</td>
+        <td class="dir">${S.podeEscrever ? `<button class="icone" type="button" data-delvenda="${esc(v.id)}" aria-label="Excluir venda">✕</button>` : ""}</td></tr>`).join("")}</tbody></table>`
+      : `<p class="vazio">Nenhuma venda neste período.</p>`;
+  }
+
+  function hbarras(obj, fmt, total) {
+    const arr = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+    if (!arr.length) return `<p class="vazio">Sem dados no período.</p>`;
+    const max = arr[0][1] || 1;
+    return arr.map(([k, v]) => `<div class="hbarra"><span class="hbarra__nome" title="${esc(k)}">${esc(k)}</span>
+      <span class="hbarra__trilho" aria-hidden="true"><i style="width:${Math.max(2, v / max * 100)}%"></i></span>
+      <span class="hbarra__val">${fmt(v)} <small>${total ? nf(v / total * 100, 0) + "%" : ""}</small></span></div>`).join("");
+  }
+
+  function graficoBarras(bs, passo) {
+    const W = 640, H = 220, pl = 52, pr = 8, pt = 12, pb = 26;
+    const max = Math.max(...bs.map((b) => b.v), 1);
+    const exp = Math.pow(10, Math.floor(Math.log10(max))), stepsN = [1, 2, 2.5, 5, 10].map((m) => m * exp).find((s) => max / s <= 4) || exp * 10;
+    const top = Math.ceil(max / stepsN) * stepsN, y = (v) => pt + (H - pt - pb) * (1 - v / top);
+    const bw = (W - pl - pr) / bs.length, barW = Math.max(2, Math.min(28, bw - 2));
+    const rot = (b) => passo === "dia" ? dataBR(b.k).slice(0, 5) : passo === "semana" ? "sem. " + dataBR(b.k).slice(0, 5) : ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][Number(b.k.slice(5, 7)) - 1] + "/" + b.k.slice(2, 4);
+    const cada = Math.ceil(bs.length / 8);
+    let g = "";
+    for (let t = 0; t <= top + 1e-9; t += stepsN) g += `<line class="grade" x1="${pl}" x2="${W - pr}" y1="${y(t)}" y2="${y(t)}"/><text class="eixo" x="${pl - 6}" y="${y(t) + 4}" text-anchor="end">${t >= 1000 ? nf(t / 1000, 1) + " mil" : nf(t)}</text>`;
+    bs.forEach((b, i) => {
+      const x = pl + i * bw + (bw - barW) / 2, h = Math.max(0, y(0) - y(b.v));
+      const r = Math.min(4, barW / 2, h);
+      const path = h > 0 ? `M${x},${y(0)} V${y(b.v) + r} Q${x},${y(b.v)} ${x + r},${y(b.v)} H${x + barW - r} Q${x + barW},${y(b.v)} ${x + barW},${y(b.v) + r} V${y(0)} Z` : "";
+      g += `<rect class="alvo" x="${pl + i * bw}" y="${pt}" width="${bw}" height="${H - pt - pb}" tabindex="0" data-i="${i}" aria-label="${rot(b)}: ${brl(b.v)}"/>`;
+      g += path ? `<path class="barra-v" d="${path}"/>` : `<path class="barra-v"/>`;
+      if (i % cada === 0) g += `<text class="eixo" x="${pl + i * bw + bw / 2}" y="${H - 8}" text-anchor="middle">${rot(b)}</text>`;
+    });
+    S._bs = bs; S._rot = rot; S._geo = { W, bw, pl, y: y };
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Faturamento por ${passo}">${g}</svg><div class="dica" id="dica" hidden></div>`;
+  }
+  function mostraDica(e) {
+    const a = e.target.closest(".alvo"); const d = $("#dica"); if (!d) return;
+    if (!a) { d.hidden = true; return; }
+    const b = S._bs[Number(a.dataset.i)], box = $("#g-tempo").getBoundingClientRect(), r = a.getBoundingClientRect();
+    d.innerHTML = `${brl(b.v)}<small>${S._rot(b)} · ${b.n} pedido${b.n === 1 ? "" : "s"}</small>`;
+    d.style.left = (r.left - box.left + r.width / 2) + "px";
+    d.style.top = (S._geo.y(b.v) / 220 * box.height) + "px";
+    d.hidden = false;
+  }
+  $("#g-tempo").addEventListener("mouseover", mostraDica);
+  $("#g-tempo").addEventListener("focusin", mostraDica);
+  $("#g-tempo").addEventListener("mouseleave", () => { const d = $("#dica"); if (d) d.hidden = true; });
+
+  $("#periodos").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-p]"); if (!b) return; S.periodo = b.dataset.p;
+    $$("#periodos button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); renderVendas();
+  });
+  $("#lista-vendas").addEventListener("click", async (e) => {
+    const pg = e.target.closest("[data-pagar]"), del = e.target.closest("[data-delvenda]");
+    try {
+      if (pg) { pg.disabled = true; await ok(sb.from("vendas").update({ status: "pago" }).eq("id", pg.dataset.pagar)); await carregar(); toast("Marcada como paga"); }
+      if (del) {
+        if (del.dataset.confirma !== "1") { del.dataset.confirma = "1"; del.textContent = "Excluir?"; del.style.color = "var(--bad)"; return; }
+        await ok(sb.from("vendas").delete().eq("id", del.dataset.delvenda)); await carregar(); toast("Venda excluída");
+      }
+    } catch (err) { falha(err); }
+  });
+
   // ---------- abas ----------
-  const ABAS = ["painel", "estoque", "receitas", "historico"];
+  const ABAS = ["painel", "estoque", "receitas", "vendas", "historico"];
   function aba() {
     const a = ABAS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "painel";
     ABAS.forEach((x) => { $("#v-" + x).hidden = x !== a; });
     $$(".abas a").forEach((l) => (l.dataset.aba === a ? l.setAttribute("aria-current", "page") : l.removeAttribute("aria-current")));
   }
-  addEventListener("hashchange", aba); aba();
+  addEventListener("hashchange", () => { aba(); renderVendas(); }); aba();
   $("#filtros").addEventListener("click", (e) => {
     const b = e.target.closest("[data-f]"); if (!b) return; S.filtro = b.dataset.f;
     $$("#filtros button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); renderEstoque();
@@ -720,12 +967,14 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
     embalagemQtd: Number(r.embalagem_qtd), precoEmbalagem: Number(r.preco_embalagem), estoque: Number(r.estoque), minimo: Number(r.minimo), controla: r.controla });
 
   async function carregar() {
-    const [a, b, c] = await Promise.all([
+    const [a, b, c, d] = await Promise.all([
       sb.from("insumos").select("*"),
       sb.from("config").select("dados").eq("id", "fichas").maybeSingle(),
       sb.from("movimentos").select("tipo,descricao,itens,valor,quando").order("quando", { ascending: false }).limit(60),
+      sb.from("vendas").select("*").gte("data", hojeISO(-400)).order("data", { ascending: false }).order("criado_em", { ascending: false }).limit(2000),
     ]);
     const err = a.error || b.error || c.error; if (err) throw err;
+    S.vendasOk = !d.error; S.vendas = d.error ? [] : d.data.map((v) => ({ ...v, total: Number(v.total), custo: Number(v.custo), subtotal: Number(v.subtotal), desconto: Number(v.desconto) }));
     S.ins = {}; a.data.forEach((r) => { S.ins[r.id] = doBanco(r); });
     S.fichas = b.data ? b.data.dados : null; if (!S.sujo) S.draft = null;
     S.movs = c.data.map((m) => ({ ...m, valor: m.valor == null ? null : Number(m.valor) }));
