@@ -297,6 +297,34 @@ p { margin: 0 0 1em; }
   .montador .btn--whats { width: auto; }
 }
 
+/* ---------- empresas e festas ---------- */
+.segmentos { display: grid; gap: 18px; margin-bottom: 28px; }
+@media (min-width: 760px) { .segmentos { grid-template-columns: repeat(3, 1fr); } }
+.segmento { padding: 24px 22px; border-top: 6px solid var(--vermelho); }
+.segmento h3 { color: var(--vermelho); }
+.segmento p { color: var(--texto-suave); font-size: .97rem; }
+.segmento ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.segmento li { padding-left: 1.5em; position: relative; font-weight: 600; font-size: .95rem; }
+.segmento li::before { content: "✓"; position: absolute; left: 0; color: var(--vermelho); font-weight: 800; }
+.orcamento { display: grid; gap: 24px; padding: 26px 20px; }
+@media (min-width: 900px) { .orcamento { grid-template-columns: 1fr 1.2fr; padding: 36px 40px; align-items: start; } }
+.orcamento__txt img { width: 64px; height: auto; margin-bottom: 10px; }
+.orcamento__txt h3 { font-size: 1.7rem; color: var(--vermelho); }
+.orcamento__txt p { color: var(--texto-suave); }
+.orcamento__regras { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.orcamento__regras li { background: var(--creme); border-radius: 12px; padding: 10px 14px; font-size: .95rem; }
+.orcamento__form { display: grid; gap: 14px; }
+.campo-dupla { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 420px) { .campo-dupla { grid-template-columns: 1fr; } }
+.campo-site { display: grid; gap: 6px; font-weight: 700; font-size: .9rem; color: var(--texto-suave); }
+.campo-site input, .campo-site select {
+  width: 100%; min-width: 0; font: 600 1rem var(--corpo); color: var(--texto);
+  padding: .75em .9em; border-radius: 14px; border: 2px solid var(--creme-2); background: var(--creme);
+}
+.campo-site input:focus, .campo-site select:focus { outline: none; border-color: var(--vermelho); }
+.orcamento__aviso { margin: 0; padding: 10px 14px; border-radius: 12px; background: #fdebd3; color: #8a4b08; font-weight: 700; font-size: .92rem; }
+.orcamento .btn--whats { width: 100%; }
+
 /* ---------- onde ---------- */
 .onde { display: grid; gap: 18px; }
 @media (min-width: 700px) { .onde { grid-template-columns: repeat(2, 1fr); } }

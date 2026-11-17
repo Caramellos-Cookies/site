@@ -82,6 +82,30 @@ window.CARAMELLOS = {
   ],
   avisoPrecos: "Valores sujeitos a alteração. Confirme sempre pelo WhatsApp.",
 
+  // ---------- EMPRESAS E FESTAS ----------
+  // Seção "Corporativo e festas". O formulário monta a mensagem do WhatsApp.
+  corporativo: {
+    minimo: 20,                      // pedido mínimo (unidades)
+    antecedencia: "5 dias úteis",    // prazo para encomendar
+    segmentos: [
+      {
+        titulo: "Empresas",
+        texto: "Mimos que fazem o time e os clientes lembrarem de você.",
+        itens: ["Brindes de fim de ano", "Boas-vindas para novos colaboradores", "Coffee break e reuniões", "Presentes para clientes"]
+      },
+      {
+        titulo: "Festas",
+        texto: "O doce que todo mundo leva pra casa (e pede o contato).",
+        itens: ["Aniversários", "Casamentos e noivados", "Chá de bebê e chá revelação", "Formaturas"]
+      },
+      {
+        titulo: "Lembrancinhas",
+        texto: "Cookie embalado um a um, pronto para entregar.",
+        itens: ["Embalagem individual", "Adesivo com nome ou logo", "Cartãozinho com mensagem", "Cores do seu evento"]
+      }
+    ]
+  },
+
   // ---------- ONDE ENCONTRAR ----------
   locais: {
     regiao: "Itaquera e bairros vizinhos da Zona Leste de São Paulo.",

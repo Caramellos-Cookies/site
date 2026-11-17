@@ -31,6 +31,7 @@
         <a href="#sabores">Sabores</a>
         <a href="#quem-faz">Quem faz</a>
         <a href="#precos">Preços</a>
+        <a href="#corporativo">Empresas e festas</a>
         <a href="#encomendar">Como pedir</a>
         <a href="#onde">Onde encontrar</a>
         <a href="#encomendar" class="btn btn--creme btn--peq">Encomendar</a>
@@ -120,6 +121,60 @@
       </div>
       <div class="precos" id="tabela-precos"><!-- preenchido por js/app.js --></div>
       <p class="aviso" id="aviso-precos"></p>
+    </section>
+
+    <!-- ============ EMPRESAS E FESTAS ============ -->
+    <section class="secao secao--creme2" id="corporativo">
+      <div class="cab">
+        <p class="sobre">Empresas e festas</p>
+        <h2>Cookie para <span class="rabisco">todo mundo</span> da festa</h2>
+        <p class="cab__txt">Brindes corporativos, lembrancinhas e mesas de doces. Cada cookie embalado um a um, com a cara do seu evento.</p>
+      </div>
+      <div class="segmentos" id="segmentos"><!-- js --></div>
+
+      <div class="orcamento cartao">
+        <div class="orcamento__txt">
+          <img src="img/marca/selo-ok-vermelho.svg" alt="" width="64" height="64">
+          <h3>Peça um orçamento</h3>
+          <p>Conta rapidinho como é o evento que eu respondo pelo WhatsApp com sabores, valores e prazo.</p>
+          <ul class="orcamento__regras">
+            <li>Pedido mínimo de <strong id="corp-min">20</strong> cookies</li>
+            <li>Encomende com <strong id="corp-prazo">5 dias úteis</strong> de antecedência</li>
+            <li>Personalização com nome, logo ou cores</li>
+          </ul>
+        </div>
+        <form class="orcamento__form" id="form-orcamento" novalidate>
+          <label class="campo-site">Tipo de evento
+            <select id="o-tipo">
+              <option>Empresa / brinde corporativo</option>
+              <option>Aniversário</option>
+              <option>Casamento / noivado</option>
+              <option>Chá de bebê / revelação</option>
+              <option>Lembrancinha</option>
+              <option>Outro</option>
+            </select>
+          </label>
+          <div class="campo-dupla">
+            <label class="campo-site">Quantidade de cookies
+              <input id="o-qtd" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex.: 50">
+            </label>
+            <label class="campo-site">Data do evento
+              <input id="o-data" type="date">
+            </label>
+          </div>
+          <label class="campo-site">Seu nome ou empresa
+            <input id="o-nome" type="text" autocomplete="name" placeholder="Ex.: Ana / Padaria do Bairro">
+          </label>
+          <label class="campo-site">Algum detalhe? (opcional)
+            <input id="o-obs" type="text" placeholder="Sabores, cores, logo, entrega…">
+          </label>
+          <p class="orcamento__aviso" id="o-aviso" hidden></p>
+          <button class="btn btn--whats btn--grande" type="submit">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3c-.2.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3 1.8.8 2.5.8 3.4.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg>
+            Pedir orçamento no WhatsApp
+          </button>
+        </form>
+      </div>
     </section>
 
     <!-- ============ COMO ENCOMENDAR ============ -->

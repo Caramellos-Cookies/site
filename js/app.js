@@ -90,6 +90,37 @@
   });
   atualizar();
 
+  // ---------- empresas e festas ----------
+  const C = D.corporativo;
+  if (C) {
+    $("#segmentos").innerHTML = C.segmentos.map((g) => `
+      <article class="segmento cartao">
+        <h3>${esc(g.titulo)}</h3>
+        <p>${esc(g.texto)}</p>
+        <ul>${g.itens.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+      </article>`).join("");
+    $("#corp-min").textContent = C.minimo;
+    $("#corp-prazo").textContent = C.antecedencia;
+    $("#o-qtd").min = 1;
+    $("#form-orcamento").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const qtd = parseInt($("#o-qtd").value, 10) || 0;
+      const aviso = $("#o-aviso");
+      if (qtd && qtd < C.minimo) { aviso.textContent = `O pedido mínimo para eventos é de ${C.minimo} cookies. Para menos, use o "Monte seu pedido" logo abaixo.`; aviso.hidden = false; return; }
+      aviso.hidden = true;
+      const data = $("#o-data").value ? new Date($("#o-data").value + "T12:00").toLocaleDateString("pt-BR") : "a combinar";
+      const linhas = [
+        "Oi, Irae! Vim pelo site e quero um orçamento para evento 🍪",
+        `• Tipo: ${$("#o-tipo").value}`,
+        `• Quantidade: ${qtd || "a definir"} cookies`,
+        `• Data: ${data}`,
+        $("#o-nome").value.trim() && `• Nome/empresa: ${$("#o-nome").value.trim()}`,
+        $("#o-obs").value.trim() && `• Detalhes: ${$("#o-obs").value.trim()}`
+      ].filter(Boolean);
+      window.open(whats(linhas.join("\n")), "_blank", "noopener");
+    });
+  }
+
   // ---------- onde encontrar ----------
   const L = D.locais;
   const lista = (arr, fmt, vazio) => arr.length ? `<ul>${arr.map(fmt).join("")}</ul>` : `<p class="vazio">${vazio}</p>`;
