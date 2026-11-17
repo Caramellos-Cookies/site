@@ -3,6 +3,6 @@
 // são o login e as regras de acesso do banco (supabase/schema.sql).
 // NUNCA coloque aqui a chave "service_role" / "secret".
 window.CARAMELLOS_SUPABASE = {
-  url: "",    // Project URL, ex.: "https://abcdefgh.supabase.co"
-  chave: ""   // anon / publishable key
+  url: "https://liztfskvsemtckmmujze.supabase.co",
+  chave: "sb_publishable_Nf1VW1J8FY3wnKuU5ag6IQ_42uWovhW"
 };
