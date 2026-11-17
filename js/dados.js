@@ -87,10 +87,32 @@ window.CARAMELLOS = {
   corporativo: {
     minimo: 20,                      // pedido mínimo (unidades)
     antecedencia: "5 dias úteis",    // prazo para encomendar
-    fotos: [
-      { foto: "img/fotos/fornada-bandeja.jpg", legenda: "Fornada saindo do forno", alt: "Bandeja cheia de cookies tradicionais recém-assados" },
-      { foto: "img/fotos/doce-de-leite-inteiro.jpg", legenda: "Doce de leite com castanha", alt: "Cookie de doce de leite coberto de castanha-do-pará picada" },
-      { foto: "img/fotos/tradicional-trio.jpg", legenda: "Tradicional com flor de sal", alt: "Três cookies tradicionais com pedaços de chocolate" }
+    // Encomendas já entregues (cases). "destaque" aparece como selo no cartão.
+    encomendas: [
+      {
+        tipo: "Empresa",
+        titulo: "Brinde corporativo com a marca do cliente",
+        texto: "Cookies embalados um a um com adesivo do logo da empresa, montados junto com o kit de presentes.",
+        destaque: "100 cookies",
+        detalhes: ["Adesivo com o logo", "Embalagem individual", "Entrega no escritório"],
+        fotos: [
+          { foto: "img/encomendas/corporativo-kit.jpg", alt: "Kit corporativo com sacola, brindes e cookies com adesivo do logo da empresa" },
+          { foto: "img/encomendas/corporativo-mao.jpg", alt: "Mão segurando cookie embalado com adesivo do logo da empresa" },
+          { foto: "img/encomendas/corporativo-cookies.jpg", alt: "Cookies embalados com adesivo vermelho do logo da empresa" }
+        ]
+      },
+      {
+        tipo: "Festa",
+        titulo: "Lembrancinha de aniversário de 3 anos",
+        texto: "Adesivo personalizado com o tema da festa e o agradecimento aos convidados, direto na mesa de doces.",
+        destaque: "",
+        detalhes: ["Adesivo com o tema da festa", "Embalagem individual", "Pronto para a mesa"],
+        fotos: [
+          { foto: "img/encomendas/aniversario-lembrancinhas.jpg", alt: "Cookies embalados com adesivo de dinossauro de aniversário de três anos" },
+          { foto: "img/encomendas/aniversario-mesa.jpg", alt: "Mesa de festa decorada com folhagens e cookies de lembrancinha" },
+          { foto: "img/encomendas/aniversario-adesivos.jpg", alt: "Quatro cookies embalados com adesivo personalizado vistos de cima" }
+        ]
+      }
     ],
     segmentos: [
       {
@@ -127,7 +149,10 @@ window.CARAMELLOS = {
     { foto: "img/fotos/doce-de-leite-aberto.jpg", alt: "Cookie de doce de leite partido mostrando o recheio" },
     { foto: "img/lembretes-gentis.jpg", alt: "Cookie de chocolate sobre azulejos vermelhos com o texto Lembretes gentis para você" },
     { foto: "img/fotos/fornada-bandeja-2.jpg", alt: "Bandeja de cookies tradicionais saindo do forno" },
-    { foto: "img/cookie-tradicional-mao.jpg", alt: "Mão segurando um cookie tradicional com o adesivo da Caramellos" }
+    { foto: "img/cookie-tradicional-mao.jpg", alt: "Mão segurando um cookie tradicional com o adesivo da Caramellos" },
+    { foto: "img/fotos/fornada-bandeja.jpg", alt: "Bandeja cheia de cookies tradicionais recém-assados" },
+    { foto: "img/fotos/doce-de-leite-inteiro.jpg", alt: "Cookie de doce de leite coberto de castanha-do-pará picada" },
+    { foto: "img/fotos/tradicional-trio.jpg", alt: "Três cookies tradicionais com pedaços de chocolate" }
   ],
 
   // ---------- FEEDBACKS DE CLIENTES ----------

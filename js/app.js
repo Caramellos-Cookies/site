@@ -99,8 +99,17 @@
         <p>${esc(g.texto)}</p>
         <ul>${g.itens.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
       </article>`).join("");
-    $("#corp-fotos").innerHTML = (C.fotos || []).map((f) => `
-      <figure class="faixa-fotos__item"><img src="${esc(f.foto)}" alt="${esc(f.alt || f.legenda)}" loading="lazy" width="900" height="1200"><figcaption>${esc(f.legenda)}</figcaption></figure>`).join("");
+    $("#corp-cases").innerHTML = (C.encomendas || []).map((e) => `
+      <article class="case cartao">
+        <div class="case__fotos">${e.fotos.slice(0, 3).map((f, i) => `<img class="case__foto case__foto--${i}" src="${esc(f.foto)}" alt="${esc(f.alt)}" loading="lazy">`).join("")}
+          ${e.destaque ? `<span class="case__selo">${esc(e.destaque)}</span>` : ""}</div>
+        <div class="case__txt">
+          <span class="case__tipo">${esc(e.tipo)}</span>
+          <h4>${esc(e.titulo)}</h4>
+          <p>${esc(e.texto)}</p>
+          <ul>${e.detalhes.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+        </div>
+      </article>`).join("");
     $("#corp-min").textContent = C.minimo;
     $("#corp-prazo").textContent = C.antecedencia;
     $("#o-qtd").min = 1;
