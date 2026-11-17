@@ -2,8 +2,9 @@
 .DS_Store
 # ferramentas locais
 .claude/
-# painel atual (versão claude.ai) — será substituído pela versão com Supabase na Fase 4
-painel/
+# painel antigo (versão claude.ai) e dados privados do negócio
+artefato/
+privado/
 
 # anotações internas de implantação (ficam só no computador)
 GUIA-IMPLANTACAO.md

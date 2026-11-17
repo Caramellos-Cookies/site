@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#db0817">
+<title>Painel · Caramellos</title>
+<link rel="icon" href="/img/marca/mascote-adesivo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: painel de cozinha — cabeçalho vermelho fixo, abas, cartões creme; números tabulares */
+:root {
+  --bg: #f5efe3;
+  --surface: #fffaf1;
+  --surface-2: #efe5d3;
+  --line: #e2d5bf;
+  --fg: #33201a;
+  --muted: #7a6155;
+  --brand: #db0817;
+  --brand-ink: #fff6ea;
+  --brand-soft: #fbe3df;
+  --ok: #2f7d4f;
+  --ok-soft: #e1f0e5;
+  --warn: #a8620a;
+  --warn-soft: #fbecd2;
+  --bad: #b3121d;
+  --bad-soft: #fbdfdc;
+  --shadow: 0 6px 20px -12px rgba(51, 32, 26, .35);
+  --display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1d1513; --surface: #2a1f1c; --surface-2: #352723; --line: #46342e;
+    --fg: #f5ebe0; --muted: #bba497; --brand: #ff4b4f; --brand-ink: #2a0a0a; --brand-soft: #4a1d1c;
+    --ok: #7ccf9a; --ok-soft: #1f3a2a; --warn: #f0b45a; --warn-soft: #43321a; --bad: #ff7b7b; --bad-soft: #4a1f1f;
+    --shadow: 0 6px 20px -12px rgba(0,0,0,.7); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1d1513; --surface: #2a1f1c; --surface-2: #352723; --line: #46342e;
+  --fg: #f5ebe0; --muted: #bba497; --brand: #ff4b4f; --brand-ink: #2a0a0a; --brand-soft: #4a1d1c;
+  --ok: #7ccf9a; --ok-soft: #1f3a2a; --warn: #f0b45a; --warn-soft: #43321a; --bad: #ff7b7b; --bad-soft: #4a1f1f;
+  --shadow: 0 6px 20px -12px rgba(0,0,0,.7); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--brand); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; margin: 0; text-wrap: balance; }
+button, input, select { font: inherit; color: inherit; }
+.num { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+/* topo */
+.topo { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--brand); color: var(--brand-ink); }
+:root:not([data-theme="light"]) .topo { color: #fff6ea; }
+.topo__in { max-width: 1100px; margin: 0 auto; padding-block: 12px 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topo__linha { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.topo h1 { font-size: 1.45rem; color: #fff6ea; }
+.topo h1 small { font: 600 .8rem var(--body); opacity: .85; display: block; letter-spacing: .02em; }
+.acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.abas { display: flex; gap: 4px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; }
+.abas a { color: #fff6ea; text-decoration: none; font: 600 .98rem var(--display); padding: 8px 14px 10px; border-radius: 12px 12px 0 0; white-space: nowrap; opacity: .85; }
+.abas a[aria-current="page"] { background: var(--bg); color: var(--brand); opacity: 1; }
+
+/* botões */
+.btn { border: 0; border-radius: 999px; padding: .6em 1.1em; font: 700 .95rem var(--display); cursor: pointer; display: inline-flex; align-items: center; gap: .4em; }
+.btn--claro { background: #fff6ea; color: #b30612; }
+.btn--marca { background: var(--brand); color: #fff6ea; }
+.btn--linha { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn--perigo { background: var(--bad-soft); color: var(--bad); }
+.btn--mini { padding: .35em .8em; font-size: .85rem; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.icone { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 6px; border-radius: 8px; font-size: 1.1rem; line-height: 1; }
+.icone:hover { background: var(--surface-2); color: var(--fg); }
+
+/* conteúdo */
+main { max-width: 1100px; margin: 0 auto; padding-block: 20px 60px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.aviso { background: var(--warn-soft); color: var(--warn); border-radius: 12px; padding: 10px 14px; font-weight: 700; margin-bottom: 16px; }
+.vista { display: grid; gap: 20px; }
+.grade2 { display: grid; gap: 20px; }
+@media (min-width: 860px) { .grade2 { grid-template-columns: 1fr 1fr; align-items: start; } }
+.cartao { background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); padding: 18px; min-width: 0; }
+.cartao > h2 { font-size: 1.2rem; margin-bottom: 4px; }
+.sub { color: var(--muted); font-size: .9rem; margin: 0 0 14px; }
+.vazio { color: var(--muted); text-align: center; padding: 24px 12px; }
+
+/* produção possível */
+.prods { display: grid; gap: 12px; }
+@media (min-width: 560px) { .prods { grid-template-columns: repeat(3, 1fr); } }
+.prod { background: var(--surface-2); border-radius: 14px; padding: 14px; display: grid; gap: 2px; }
+.prod__nome { font: 600 .95rem var(--display); }
+.prod__n { font: 700 2.2rem/1 var(--display); color: var(--brand); }
+.prod__lim { font-size: .82rem; color: var(--muted); }
+
+/* alertas */
+.alertas { display: grid; gap: 8px; }
+.alerta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--warn-soft); }
+.alerta--bad { background: var(--bad-soft); }
+.alerta strong { display: block; }
+.alerta small { color: var(--muted); }
+
+/* tabelas */
+.rolagem { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+th { text-align: left; font: 700 .72rem var(--body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 6px 8px; border-bottom: 1.5px solid var(--line); white-space: nowrap; }
+td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+td.dir, th.dir { text-align: right; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+
+/* chips */
+.chip { display: inline-block; padding: .15em .65em; border-radius: 999px; font: 700 .75rem var(--body); white-space: nowrap; }
+.chip--ok { background: var(--ok-soft); color: var(--ok); }
+.chip--warn { background: var(--warn-soft); color: var(--warn); }
+.chip--bad { background: var(--bad-soft); color: var(--bad); }
+.chip--neutro { background: var(--surface-2); color: var(--muted); }
+.margem--boa { color: var(--ok); font-weight: 800; }
+.margem--media { color: var(--warn); font-weight: 800; }
+.margem--ruim { color: var(--bad); font-weight: 800; }
+
+/* lista de estoque */
+.filtros { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.filtros button { border: 0; background: var(--surface-2); color: var(--muted); border-radius: 999px; padding: .35em .9em; font-weight: 700; font-size: .88rem; cursor: pointer; }
+.filtros button[aria-pressed="true"] { background: var(--brand); color: #fff6ea; }
+.insumos { display: grid; gap: 10px; }
+@media (min-width: 760px) { .insumos { grid-template-columns: 1fr 1fr; } }
+.ins { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 14px 12px; display: grid; gap: 8px; min-width: 0; }
+.ins__topo { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.ins__nome { font: 600 1.05rem var(--display); }
+.ins__emb { color: var(--muted); font-size: .82rem; }
+.ins__qtd { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.ins__qtd b { font: 700 1.35rem var(--display); }
+.ins__qtd span { color: var(--muted); font-size: .85rem; }
+.barra { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; position: relative; }
+.barra i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: var(--ok); }
+.barra--warn i { background: var(--warn); }
+.barra--bad i { background: var(--bad); }
+.barra em { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--fg); opacity: .35; }
+
+/* receitas */
+.linhas { display: grid; gap: 8px; }
+.linha { display: grid; grid-template-columns: minmax(0, 1fr) 92px 44px 34px; gap: 6px; align-items: center; }
+.linha span { color: var(--muted); font-size: .85rem; }
+.campo { display: grid; gap: 4px; font-size: .85rem; font-weight: 700; color: var(--muted); }
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], input:not([type]), select {
+  width: 100%; min-width: 0; padding: .5em .65em; border-radius: 10px; border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); font-weight: 600;
+}
+input:focus, select:focus { border-color: var(--brand); outline: none; }
+.campos { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.prodficha { border-top: 1.5px dashed var(--line); padding-top: 14px; margin-top: 14px; display: grid; gap: 10px; }
+.prodficha__cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.prodficha__cab h3 { font-size: 1.05rem; }
+.barra-salvar { position: sticky; bottom: 12px; display: flex; justify-content: flex-end; gap: 8px; align-items: center; background: var(--surface); padding: 10px 14px; border-radius: 999px; box-shadow: var(--shadow); }
+.barra-salvar[hidden] { display: none !important; }
+
+/* histórico */
+.mov { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.mov:last-child { border-bottom: 0; }
+.mov__data { color: var(--muted); font-size: .8rem; white-space: nowrap; }
+.mov__desc { min-width: 0; }
+.mov__desc small { display: block; color: var(--muted); font-size: .8rem; overflow-wrap: anywhere; }
+
+/* diálogo */
+dialog { border: 0; border-radius: 20px; padding: 0; width: min(560px, calc(100vw - 24px)); max-height: calc(100vh - 32px); background: var(--surface); color: var(--fg); box-shadow: 0 30px 80px -20px rgba(0,0,0,.5); }
+dialog::backdrop { background: rgba(30, 10, 8, .45); }
+.dlg { display: grid; gap: 14px; padding: 20px; }
+.dlg h2 { font-size: 1.3rem; }
+.dlg__rodape { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 14px; }
+.previa { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; max-height: 240px; overflow: auto; }
+.previa td { padding: 6px 4px; }
+.neg { color: var(--bad); font-weight: 800; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-weight: 700; z-index: 20; box-shadow: var(--shadow); }
+.check { display: flex; gap: 8px; align-items: center; font-weight: 700; font-size: .9rem; }
+/* login */
+.entrada { min-height: 100vh; display: grid; place-items: center; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); background: var(--brand); }
+.entrada__caixa { width: min(400px, 100%); background: var(--surface); border-radius: 24px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.5); padding: 28px 24px; display: grid; gap: 14px; }
+.entrada__marca { display: grid; justify-items: center; gap: 6px; margin-bottom: 4px; }
+.entrada__marca img { width: 96px; height: auto; }
+.entrada__marca h1 { font-size: 1.5rem; color: var(--brand); }
+.entrada__marca p { margin: 0; color: var(--muted); font-size: .92rem; text-align: center; }
+.entrada .btn { justify-content: center; width: 100%; padding-block: .8em; }
+.entrada__link { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: .88rem; justify-self: center; }
+.entrada__msg { margin: 0; padding: 10px 12px; border-radius: 12px; font-weight: 700; font-size: .9rem; background: var(--warn-soft); color: var(--warn); }
+.entrada__msg--ok { background: var(--ok-soft); color: var(--ok); }
+.usuario { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: #fff6ea; opacity: .9; }
+.usuario button { background: rgba(255,246,234,.18); color: #fff6ea; border: 0; border-radius: 999px; padding: .3em .8em; font: 700 .8rem var(--display); cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<section class="entrada" id="login">
+  <form class="entrada__caixa" id="form-login" novalidate>
+    <div class="entrada__marca">
+      <img src="/img/marca/mascote-adesivo.svg" alt="" width="96" height="94">
+      <h1>Painel Caramellos</h1>
+      <p id="login-sub">Estoque, receitas e custos. Entre com seu e-mail e senha.</p>
+    </div>
+    <p class="entrada__msg" id="login-msg" hidden></p>
+    <label class="campo" id="l-email">E-mail<input type="email" id="login-email" autocomplete="username" required></label>
+    <label class="campo" id="l-senha">Senha<input type="password" id="login-senha" autocomplete="current-password" required></label>
+    <label class="campo" id="l-nova" hidden>Nova senha (mínimo 8 caracteres)<input type="password" id="login-nova" autocomplete="new-password" minlength="8"></label>
+    <button class="btn btn--marca" type="submit" id="login-btn">Entrar</button>
+    <button class="entrada__link" type="button" id="login-esqueci">Esqueci minha senha</button>
+  </form>
+</section>
+
+<div id="app" hidden>
+<header class="topo">
+  <div class="topo__in">
+    <div class="topo__linha">
+      <h1>Estoque Caramellos<small>Insumos, receitas e custos dos cookies</small></h1>
+      <div class="acoes">
+        <span class="usuario"><span id="quem"></span><button type="button" id="b-sair">Sair</button></span>
+        <button class="btn btn--claro" id="b-producao" type="button">🍪 Registrar fornada</button>
+        <button class="btn btn--claro" id="b-compra" type="button">🛒 Registrar compra</button>
+      </div>
+    </div>
+    <nav class="abas" aria-label="Seções">
+      <a href="#painel" data-aba="painel">Painel</a>
+      <a href="#estoque" data-aba="estoque">Estoque</a>
+      <a href="#receitas" data-aba="receitas">Receitas e custos</a>
+      <a href="#historico" data-aba="historico">Histórico</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <p class="aviso" id="aviso" hidden></p>
+
+  <!-- PAINEL -->
+  <section class="vista" id="v-painel">
+    <div class="cartao">
+      <h2>Dá pra fazer com o estoque atual</h2>
+      <p class="sub">Quantos cookies de cada sabor o estoque cobre, e qual insumo acaba primeiro.</p>
+      <div class="prods" id="pode-fazer"><p class="vazio">Carregando o estoque…</p></div>
+    </div>
+    <div class="grade2">
+      <div class="cartao">
+        <h2>Precisa repor</h2>
+        <p class="sub">Insumos abaixo do estoque mínimo.</p>
+        <div class="alertas" id="alertas"><p class="vazio">Carregando…</p></div>
+      </div>
+      <div class="cartao">
+        <h2>Custo e lucro por cookie</h2>
+        <p class="sub">Massa proporcional + recheio + embalagem individual.</p>
+        <div class="rolagem" id="custos"><p class="vazio">Carregando…</p></div>
+        <p class="sub" id="custo-pedido" style="margin:12px 0 0"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTOQUE -->
+  <section class="vista" id="v-estoque" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="filtros" id="filtros" style="margin:0">
+        <button type="button" data-f="todos" aria-pressed="true">Todos</button>
+        <button type="button" data-f="ingrediente" aria-pressed="false">Ingredientes</button>
+        <button type="button" data-f="embalagem" aria-pressed="false">Embalagens</button>
+        <button type="button" data-f="custo" aria-pressed="false">Gás e energia</button>
+      </div>
+      <button class="btn btn--marca" type="button" id="b-novo">+ Novo insumo</button>
+    </div>
+    <div class="insumos" id="lista-insumos"><p class="vazio">Carregando o estoque…</p></div>
+  </section>
+
+  <!-- RECEITAS -->
+  <section class="vista" id="v-receitas" hidden>
+    <div class="cartao" id="ficha"><p class="vazio">Carregando as receitas…</p></div>
+    <div class="barra-salvar" id="barra-salvar" hidden>
+      <span class="sub" style="margin:0">Alterações não salvas</span>
+      <button class="btn btn--linha" type="button" id="b-descartar">Descartar</button>
+      <button class="btn btn--marca" type="button" id="b-salvar">Salvar receitas</button>
+    </div>
+  </section>
+
+  <!-- HISTÓRICO -->
+  <section class="vista" id="v-historico" hidden>
+    <div class="cartao">
+      <h2>Últimas movimentações</h2>
+      <p class="sub">Fornadas, compras e ajustes de contagem.</p>
+      <div id="historico"><p class="vazio">Carregando…</p></div>
+    </div>
+  </section>
+</main>
+
+</div>
+
+<dialog id="dlg"><form class="dlg" id="dlg-form" method="dialog"></form></dialog>
+
+<script src="/painel/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const nf = (n, d = 0) => (Number(n) || 0).toLocaleString("pt-BR", { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const brl = (n) => (Number(n) || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  // Aceita "4.500" (milhar), "4.500,50", "0,95" e "0.95"
+  const num = (v) => {
+    let s = String(v ?? "").trim().replace(/\s|R\$/g, "");
+    if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+    else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+    const x = parseFloat(s); return isFinite(x) ? x : 0;
+  };
+  const slug = (t) => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "insumo";
+  const CAT = { ingrediente: "Ingrediente", embalagem: "Embalagem", custo: "Gás e energia" };
+
+  const S = { ins: {}, fichas: null, movs: [], okIns: false, okFic: false, db: null, podeEscrever: true, filtro: "todos", draft: null, sujo: false };
+
+  function fq(v, u) {
+    v = Number(v) || 0;
+    if (u === "g" || u === "ml") { const big = u === "g" ? "kg" : "L"; return Math.abs(v) >= 1000 ? nf(v / 1000, 2) + " " + big : nf(v, 0) + " " + u; }
+    if (u === "un") return nf(v, Math.abs(v) < 10 ? 1 : 0) + " un";
+    return nf(v, 2) + " " + u;
+  }
+  const precoUn = (i) => (i && i.embalagemQtd > 0 ? (i.precoEmbalagem || 0) / i.embalagemQtd : 0);
+  const nomeIns = (id) => (S.ins[id] ? S.ins[id].nome : id + " (removido)");
+  const listaIns = () => Object.values(S.ins).sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
+  function status(i) {
+    if (i.controla === false) return { k: "neutro", t: "Só custo" };
+    if ((i.estoque || 0) <= 0) return { k: "bad", t: "Acabou" };
+    if ((i.estoque || 0) < (i.minimo || 0)) return { k: "warn", t: "Repor" };
+    return { k: "ok", t: "OK" };
+  }
+
+  // ---------- cálculo ----------
+  function add(m, k, q) { if (!k || !q) return; m[k] = (m[k] || 0) + q; }
+  function consumoCookie(p, F = S.fichas) {
+    const m = {}; if (!F) return m;
+    const f = (num(p.massaG) || 0) / (num(F.massa?.rendimentoG) || 1);
+    (F.massa?.itens || []).forEach((it) => add(m, it.insumo, num(it.qtd) * f));
+    (p.porCookie || []).forEach((it) => add(m, it.insumo, num(it.qtd)));
+    return m;
+  }
+  const custoMapa = (m) => Object.entries(m).reduce((s, [k, q]) => s + q * precoUn(S.ins[k]), 0);
+  function consumoTotal(qtds, pedidos, F = S.fichas) {
+    const m = {};
+    (F?.produtos || []).forEach((p) => { const q = qtds[p.id] || 0; if (q) Object.entries(consumoCookie(p, F)).forEach(([k, v]) => add(m, k, v * q)); });
+    (F?.porPedido || []).forEach((it) => add(m, it.insumo, num(it.qtd) * (pedidos || 0)));
+    return m;
+  }
+  function podeFazer(p) {
+    let min = Infinity, lim = null;
+    Object.entries(consumoCookie(p)).forEach(([k, q]) => {
+      const i = S.ins[k]; if (!i || i.controla === false || q <= 0) return;
+      const n = Math.floor((i.estoque || 0) / q);
+      if (n < min) { min = n; lim = k; }
+    });
+    return { n: min === Infinity ? null : Math.max(0, min), lim };
+  }
+
+  // ---------- render ----------
+  function render() {
+    renderPainel(); renderEstoque(); renderHistorico();
+    if (!S.sujo) renderFicha();
+  }
+
+  function renderPainel() {
+    if (!S.okIns || !S.okFic) return;
+    const F = S.fichas;
+    const box = $("#pode-fazer");
+    if (!F || !(F.produtos || []).length) box.innerHTML = `<p class="vazio">Cadastre as receitas na aba <a href="#receitas">Receitas e custos</a> para ver quantos cookies dá pra fazer.</p>`;
+    else box.innerHTML = F.produtos.map((p) => {
+      const r = podeFazer(p);
+      return `<div class="prod"><span class="prod__nome">${esc(p.nome)}</span>
+        <span class="prod__n num">${r.n == null ? "—" : nf(r.n)}</span>
+        <span class="prod__lim">${r.lim ? "acaba primeiro: <b>" + esc(nomeIns(r.lim)) + "</b>" : "sem insumos controlados"}</span></div>`;
+    }).join("");
+
+    const baixos = listaIns().filter((i) => ["bad", "warn"].includes(status(i).k));
+    $("#alertas").innerHTML = !Object.keys(S.ins).length
+      ? `<p class="vazio">Nenhum insumo cadastrado. Comece pela aba <a href="#estoque">Estoque</a>.</p>`
+      : baixos.length ? baixos.map((i) => { const s = status(i); return `<div class="alerta ${s.k === "bad" ? "alerta--bad" : ""}">
+          <div><strong>${esc(i.nome)}</strong><small class="num">tem ${fq(i.estoque, i.unidade)} · mínimo ${fq(i.minimo, i.unidade)}</small></div>
+          <span class="chip chip--${s.k}">${s.t}</span></div>`; }).join("")
+      : `<p class="vazio">Tudo em dia. Nenhum insumo abaixo do mínimo. ✅</p>`;
+
+    if (!F || !(F.produtos || []).length) { $("#custos").innerHTML = `<p class="vazio">Sem receitas cadastradas.</p>`; $("#custo-pedido").textContent = ""; return; }
+    $("#custos").innerHTML = `<table><thead><tr><th>Sabor</th><th class="dir">Custo</th><th class="dir">Preço</th><th class="dir">Lucro</th><th class="dir">Margem</th></tr></thead><tbody>${
+      F.produtos.map((p) => {
+        const c = custoMapa(consumoCookie(p)), pr = num(p.preco), l = pr - c, mg = pr > 0 ? (l / pr) * 100 : 0;
+        const cls = mg >= 55 ? "boa" : mg >= 35 ? "media" : "ruim";
+        return `<tr><td>${esc(p.nome)}</td><td class="dir num">${brl(c)}</td><td class="dir num">${brl(pr)}</td><td class="dir num">${brl(l)}</td><td class="dir num margem--${cls}">${nf(mg, 0)}%</td></tr>`;
+      }).join("")}</tbody></table>`;
+    const cp = custoMapa(consumoTotal({}, 1));
+    $("#custo-pedido").innerHTML = cp > 0 ? `Cada entrega custa mais <b class="num">${brl(cp)}</b> em embalagem do pedido (sacolinha, lacre…).` : "";
+  }
+
+  function renderEstoque() {
+    if (!S.okIns) return;
+    const box = $("#lista-insumos");
+    const itens = listaIns().filter((i) => S.filtro === "todos" || (i.categoria || "ingrediente") === S.filtro);
+    if (!Object.keys(S.ins).length) { box.innerHTML = `<p class="vazio">Nenhum insumo ainda. Toque em <b>+ Novo insumo</b> para cadastrar o primeiro (ex.: Nutella, pote de 3 kg).</p>`; return; }
+    if (!itens.length) { box.innerHTML = `<p class="vazio">Nada nesta categoria.</p>`; return; }
+    box.innerHTML = itens.map((i) => {
+      const s = status(i), est = i.estoque || 0;
+      const teto = Math.max((i.minimo || 0) * 3, i.embalagemQtd || 0, est, 1);
+      const pct = Math.max(0, Math.min(100, (est / teto) * 100)), pm = Math.min(100, ((i.minimo || 0) / teto) * 100);
+      const emb = i.embalagemQtd > 0 ? est / i.embalagemQtd : 0;
+      return `<article class="ins">
+        <div class="ins__topo"><div><div class="ins__nome">${esc(i.nome)}</div>
+          <div class="ins__emb num">${esc(i.embalagemNome || "embalagem")} · ${fq(i.embalagemQtd, i.unidade)} · ${brl(i.precoEmbalagem)}</div></div>
+          <div style="display:flex;gap:4px;align-items:center"><span class="chip chip--${s.k}">${s.t}</span>
+          ${S.podeEscrever ? `<button class="icone" type="button" data-edit="${esc(i.id)}" aria-label="Editar ${esc(i.nome)}">✎</button>` : ""}</div></div>
+        ${i.controla === false
+          ? `<div class="ins__qtd"><span>Não controla estoque, entra só no custo</span><span class="num">${brl(precoUn(i))} / ${esc(i.unidade)}</span></div>`
+          : `<div class="ins__qtd"><b class="num">${fq(est, i.unidade)}</b><span class="num">≈ ${nf(emb, 1)} ${esc(i.embalagemNome || "emb.")} · mín. ${fq(i.minimo, i.unidade)}</span></div>
+             <div class="barra barra--${s.k}" role="img" aria-label="${nf(pct)}% do nível de referência"><i style="width:${pct}%"></i>${pm > 0 ? `<em style="left:${pm}%"></em>` : ""}</div>`}
+      </article>`;
+    }).join("");
+  }
+
+  function renderHistorico() {
+    const box = $("#historico");
+    if (!S.okIns) return;
+    if (!S.movs.length) { box.innerHTML = `<p class="vazio">Nada registrado ainda. Use <b>Registrar fornada</b> ou <b>Registrar compra</b>.</p>`; return; }
+    const tipo = { producao: ["Fornada", "ok"], compra: ["Compra", "warn"], ajuste: ["Contagem", "neutro"] };
+    box.innerHTML = S.movs.map((m) => {
+      const d = new Date(m.quando), t = tipo[m.tipo] || [m.tipo, "neutro"];
+      const det = (m.itens || []).slice(0, 6).map((it) => `${esc(it.nome)} ${it.delta > 0 ? "+" : ""}${fq(it.delta, it.unidade)}`).join(" · ") + ((m.itens || []).length > 6 ? " …" : "");
+      return `<div class="mov"><span class="chip chip--${t[1]}">${t[0]}</span>
+        <div class="mov__desc"><b>${esc(m.descricao)}</b><small class="num">${det}</small></div>
+        <div style="text-align:right"><div class="mov__data">${isNaN(d) ? "" : d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</div>${m.valor ? `<b class="num">${brl(m.valor)}</b>` : ""}</div></div>`;
+    }).join("");
+  }
+
+  // ---------- ficha técnica (editável) ----------
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  function opcoes(sel) {
+    return `<option value="">Escolha…</option>` + listaIns().map((i) => `<option value="${esc(i.id)}" ${i.id === sel ? "selected" : ""}>${esc(i.nome)}</option>`).join("");
+  }
+  function linhasHTML(lista, grupo) {
+    return `<div class="linhas">${lista.map((it, k) => `<div class="linha">
+      <select data-g="${grupo}" data-k="${k}" data-c="insumo" aria-label="Insumo">${opcoes(it.insumo)}</select>
+      <input data-g="${grupo}" data-k="${k}" data-c="qtd" inputmode="decimal" value="${esc(String(it.qtd).replace(".", ","))}" aria-label="Quantidade">
+      <span>${esc(S.ins[it.insumo]?.unidade || "")}</span>
+      <button class="icone" type="button" data-rm="${grupo}" data-k="${k}" aria-label="Remover linha">✕</button></div>`).join("")}
+      <div><button class="btn btn--linha btn--mini" type="button" data-addl="${grupo}">+ Adicionar insumo</button></div></div>`;
+  }
+  function grupoLista(D, g) {
+    if (g === "massa") return D.massa.itens;
+    if (g === "pedido") return D.porPedido;
+    return D.produtos[Number(g.slice(1))].porCookie;
+  }
+  function renderFicha() {
+    const box = $("#ficha");
+    if (!S.okFic || !S.okIns) return;
+    if (!S.draft) S.draft = clone(S.fichas || { massa: { rendimentoG: 730, itens: [] }, produtos: [], porPedido: [] });
+    const D = S.draft;
+    const mm = {}; (D.massa.itens || []).forEach((it) => add(mm, it.insumo, num(it.qtd)));
+    const cm = custoMapa(mm);
+    const rg = num(D.massa.rendimentoG) || 1;
+    // peso dos ingredientes pesáveis (g/ml), sem gás e energia
+    let soma = 0; const unids = [];
+    Object.entries(mm).forEach(([k, q]) => {
+      const i = S.ins[k]; if (!i || i.categoria === "custo") return;
+      if (i.unidade === "g" || i.unidade === "ml") soma += q; else unids.push(nf(q, 2) + " " + i.unidade + " de " + i.nome);
+    });
+    const fora = soma > 0 && (rg < soma * 0.95 || rg > soma * 1.25);
+    const pesoInfo = soma > 0
+      ? `<p class="sub num" style="margin:0 0 12px">Ingredientes pesados somam <b>${fq(soma, "g")}</b>${unids.length ? " + " + esc(unids.join(", ")) : ""}. Rendimento informado: <b>${fq(rg, "g")}</b>.
+         ${fora ? `<span class="chip chip--warn">Confira o rendimento</span> Ele está longe da soma dos ingredientes; se você mudou a receita, atualize o rendimento.` : `<span class="chip chip--ok">Rendimento coerente</span>`}</p>`
+      : "";
+    box.innerHTML = `
+      <h2>Massa base</h2>
+      <p class="sub">O que vai numa receita da massa amanteigada. A massa de cada sabor é calculada proporcionalmente ao peso usado por cookie.</p>
+      <div class="campos" style="margin-bottom:12px">
+        <label class="campo">Rendimento da receita (g de massa)<input id="f-rend" inputmode="decimal" value="${esc(String(D.massa.rendimentoG ?? ""))}"></label>
+        <div class="campo">Custo da receita<b class="num" style="color:var(--fg);font-size:1.1rem">${brl(cm)} · ${brl(cm / rg * 1000)}/kg</b></div>
+      </div>
+      ${pesoInfo}
+      ${linhasHTML(D.massa.itens, "massa")}
+      ${D.produtos.map((p, n) => {
+        const c = custoMapa(consumoCookie(p, D));
+        return `<div class="prodficha">
+          <div class="prodficha__cab"><h3>${esc(p.nome)}</h3><span class="sub num" style="margin:0">custo ${brl(c)} · preço ${brl(p.preco)}</span></div>
+          <div class="campos">
+            <label class="campo">Nome<input data-p="${n}" data-c="nome" value="${esc(p.nome)}"></label>
+            <label class="campo">Preço de venda (R$)<input data-p="${n}" data-c="preco" inputmode="decimal" value="${esc(String(p.preco).replace(".", ","))}"></label>
+            <label class="campo">Massa por cookie (g)<input data-p="${n}" data-c="massaG" inputmode="decimal" value="${esc(String(p.massaG))}"></label>
+          </div>
+          <p class="sub" style="margin:0">Além da massa, por cookie:</p>
+          ${linhasHTML(p.porCookie, "p" + n)}
+          <div><button class="btn btn--perigo btn--mini" type="button" data-rmp="${n}">Remover sabor</button></div>
+        </div>`;
+      }).join("")}
+      <div class="prodficha"><div><button class="btn btn--linha" type="button" id="b-addp">+ Novo sabor</button></div></div>
+      <div class="prodficha">
+        <div class="prodficha__cab"><h3>Por pedido entregue</h3><span class="sub num" style="margin:0">custo ${brl(custoMapa(consumoTotal({}, 1, D)))}</span></div>
+        <p class="sub" style="margin:0">Sacolinha, adesivo de lacre, cartãozinho… o que vai uma vez por entrega.</p>
+        ${linhasHTML(D.porPedido, "pedido")}
+      </div>`;
+    if (!S.podeEscrever) $$("input,select,button", box).forEach((e) => (e.disabled = true));
+  }
+  function marcarSujo() { S.sujo = true; $("#barra-salvar").hidden = false; }
+
+  $("#ficha").addEventListener("change", (e) => {
+    const t = e.target, D = S.draft; if (!D) return;
+    if (t.id === "f-rend") D.massa.rendimentoG = num(t.value);
+    else if (t.dataset.p != null) { const p = D.produtos[Number(t.dataset.p)]; p[t.dataset.c] = t.dataset.c === "nome" ? t.value.trim() : num(t.value); }
+    else if (t.dataset.g) { const it = grupoLista(D, t.dataset.g)[Number(t.dataset.k)]; it[t.dataset.c] = t.dataset.c === "qtd" ? num(t.value) : t.value; }
+    marcarSujo(); renderFicha();
+  });
+  $("#ficha").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b || !S.draft) return; const D = S.draft;
+    if (b.dataset.addl) grupoLista(D, b.dataset.addl).push({ insumo: "", qtd: 0 });
+    else if (b.dataset.rm) grupoLista(D, b.dataset.rm).splice(Number(b.dataset.k), 1);
+    else if (b.dataset.rmp != null) {
+      if (b.dataset.confirma !== "1") { b.dataset.confirma = "1"; b.textContent = "Toque de novo para remover"; return; }
+      D.produtos.splice(Number(b.dataset.rmp), 1);
+    }
+    else if (b.id === "b-addp") D.produtos.push({ id: "sabor-" + Date.now().toString(36), nome: "Novo sabor", preco: 0, massaG: 80, porCookie: [] });
+    else return;
+    marcarSujo(); renderFicha();
+  });
+  $("#b-descartar").addEventListener("click", () => { S.sujo = false; S.draft = null; $("#barra-salvar").hidden = true; renderFicha(); });
+  $("#b-salvar").addEventListener("click", async () => {
+    const D = clone(S.draft);
+    const limpa = (l) => l.filter((it) => it.insumo && num(it.qtd) > 0).map((it) => ({ insumo: it.insumo, qtd: num(it.qtd) }));
+    D.massa.itens = limpa(D.massa.itens); D.porPedido = limpa(D.porPedido);
+    D.produtos.forEach((p) => (p.porCookie = limpa(p.porCookie)));
+    const b = $("#b-salvar"); b.disabled = true;
+    try {
+      await ok(sb.from("config").upsert({ id: "fichas", dados: D, atualizado_em: new Date().toISOString() }));
+      S.sujo = false; S.draft = null; $("#barra-salvar").hidden = true;
+      await carregar(); toast("Receitas salvas");
+    }
+    catch (err) { falha(err); }
+    finally { b.disabled = false; }
+  });
+
+  // ---------- diálogos ----------
+  const dlg = $("#dlg"), form = $("#dlg-form");
+  let aoConfirmar = null;
+  function abrir(html, onOk, onInput) {
+    form.innerHTML = html; aoConfirmar = onOk;
+    form.oninput = onInput || null;
+    dlg.showModal();
+    const f = form.querySelector("input,select"); if (f) f.focus();
+    if (onInput) onInput();
+  }
+  form.addEventListener("click", (e) => { if (e.target.closest("[data-fechar]")) { e.preventDefault(); dlg.close(); } });
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const b = e.submitter; if (!aoConfirmar) return;
+    if (b) b.disabled = true;
+    try { const r = await aoConfirmar(b); if (r !== false) dlg.close(); }
+    catch (err) { falha(err); }
+    finally { if (b) b.disabled = false; }
+  });
+
+  // Baixa/soma estoque e grava o histórico numa única operação no banco
+  async function aplicarDeltas(deltas, mov) {
+    const d = {};
+    Object.entries(deltas).forEach(([k, v]) => { const i = S.ins[k]; if (i && i.controla !== false && v) d[k] = Math.round(v * 1000) / 1000; });
+    await ok(sb.rpc("registrar_movimento", { p_tipo: mov.tipo, p_descricao: mov.descricao, p_valor: mov.valor ?? null, p_deltas: d }));
+    await carregar();
+  }
+
+  // fornada
+  $("#b-producao").addEventListener("click", () => {
+    const F = S.fichas;
+    if (!F || !(F.produtos || []).length) { toast("Cadastre as receitas primeiro"); location.hash = "receitas"; return; }
+    abrir(`<h2>Registrar fornada</h2>
+      <p class="sub" style="margin:0">Quantos cookies saíram? O estoque baixa automaticamente pela receita.</p>
+      <div class="campos">${F.produtos.map((p) => `<label class="campo">${esc(p.nome)}<input type="number" min="0" step="1" id="q-${esc(p.id)}" value="0"></label>`).join("")}
+        <label class="campo">Pedidos entregues (sacolinhas)<input type="number" min="0" step="1" id="q-pedidos" value="0"></label></div>
+      <div class="previa" id="previa"></div>
+      <div class="dlg__rodape"><button class="btn btn--linha" data-fechar type="button">Cancelar</button><button class="btn btn--marca" type="submit" id="ok-prod">Baixar do estoque</button></div>`,
+    async () => {
+      const { qtds, ped } = lerProd();
+      const tot = Object.values(qtds).reduce((a, b) => a + b, 0);
+      if (!tot && !ped) { toast("Informe ao menos um cookie ou pedido"); return false; }
+      const m = consumoTotal(qtds, ped);
+      const desc = F.produtos.filter((p) => qtds[p.id]).map((p) => `${qtds[p.id]} ${p.nome}`).join(", ") + (ped ? `${tot ? " · " : ""}${ped} pedido${ped > 1 ? "s" : ""}` : "");
+      const custo = custoMapa(m);
+      await aplicarDeltas(Object.fromEntries(Object.entries(m).map(([k, v]) => [k, -v])), { tipo: "producao", descricao: desc, valor: Math.round(custo * 100) / 100 });
+      toast("Fornada registrada");
+    }, () => {
+      const { qtds, ped } = lerProd(); const m = consumoTotal(qtds, ped);
+      const rows = Object.entries(m).filter(([k]) => S.ins[k]).sort((a, b) => nomeIns(a[0]).localeCompare(nomeIns(b[0]), "pt-BR"));
+      $("#previa").innerHTML = rows.length ? `<table><thead><tr><th>Insumo</th><th class="dir">Usa</th><th class="dir">Fica com</th></tr></thead><tbody>${rows.map(([k, v]) => {
+        const i = S.ins[k], fica = (i.estoque || 0) - v;
+        return `<tr><td>${esc(i.nome)}</td><td class="dir num">${fq(v, i.unidade)}</td><td class="dir num ${i.controla !== false && fica < 0 ? "neg" : ""}">${i.controla === false ? "—" : fq(fica, i.unidade)}</td></tr>`;
+      }).join("")}</tbody></table><p class="sub num" style="margin:8px 0 0">Custo desta fornada: <b>${brl(custoMapa(m))}</b></p>` : `<p class="sub" style="margin:0">A prévia do consumo aparece aqui.</p>`;
+    });
+    function lerProd() {
+      const qtds = {}; F.produtos.forEach((p) => (qtds[p.id] = Math.max(0, Math.round(num($("#q-" + CSS.escape(p.id))?.value)))));
+      return { qtds, ped: Math.max(0, Math.round(num($("#q-pedidos")?.value))) };
+    }
+  });
+
+  // compra
+  $("#b-compra").addEventListener("click", () => abrirCompra());
+  function abrirCompra(pre) {
+    const lst = listaIns().filter((i) => i.controla !== false);
+    if (!lst.length) { toast("Cadastre um insumo primeiro"); location.hash = "estoque"; return; }
+    const sel = pre || lst[0].id;
+    abrir(`<h2>Registrar compra</h2>
+      <label class="campo">Insumo<select id="c-ins">${lst.map((i) => `<option value="${esc(i.id)}" ${i.id === sel ? "selected" : ""}>${esc(i.nome)}</option>`).join("")}</select></label>
+      <div class="campos"><label class="campo">Quantas embalagens<input type="number" min="1" step="1" id="c-n" value="1"></label>
+        <label class="campo">Valor total pago (R$)<input id="c-v" inputmode="decimal" placeholder="0,00"></label></div>
+      <p class="sub" id="c-info" style="margin:0"></p>
+      <div class="dlg__rodape"><button class="btn btn--linha" data-fechar type="button">Cancelar</button><button class="btn btn--marca" type="submit">Somar ao estoque</button></div>`,
+    async () => {
+      const i = S.ins[$("#c-ins").value], n = Math.max(0, num($("#c-n").value)), v = num($("#c-v").value);
+      if (!i || n <= 0) { toast("Informe a quantidade de embalagens"); return false; }
+      if (v > 0) await ok(sb.from("insumos").update({ preco_embalagem: Math.round((v / n) * 100) / 100 }).eq("id", i.id));
+      await aplicarDeltas({ [i.id]: n * i.embalagemQtd }, { tipo: "compra", descricao: `${nf(n, 2)} × ${i.embalagemNome || "embalagem"} de ${i.nome}`, valor: v || n * (i.precoEmbalagem || 0) });
+      toast("Compra registrada");
+    }, (e) => {
+      const i = S.ins[$("#c-ins").value]; if (!i) return;
+      if (e && e.target && e.target.id === "c-ins") $("#c-v").value = "";
+      const n = Math.max(0, num($("#c-n").value));
+      $("#c-v").placeholder = (n * (i.precoEmbalagem || 0)).toFixed(2).replace(".", ",");
+      $("#c-info").innerHTML = `Soma <b class="num">${fq(n * i.embalagemQtd, i.unidade)}</b> (${esc(i.embalagemNome || "embalagem")} de ${fq(i.embalagemQtd, i.unidade)}). Estoque vai a <b class="num">${fq((i.estoque || 0) + n * i.embalagemQtd, i.unidade)}</b>. Se o preço mudou, o novo valor passa a valer nos custos.`;
+    });
+  }
+
+  // novo / editar insumo
+  $("#b-novo").addEventListener("click", () => abrirInsumo(null));
+  $("#lista-insumos").addEventListener("click", (e) => { const b = e.target.closest("[data-edit]"); if (b) abrirInsumo(S.ins[b.dataset.edit]); });
+  function abrirInsumo(i) {
+    const v = i || { nome: "", categoria: "ingrediente", unidade: "g", embalagemNome: "", embalagemQtd: "", precoEmbalagem: "", estoque: 0, minimo: 0, controla: true };
+    const u = ["g", "ml", "un", "kWh"];
+    abrir(`<h2>${i ? "Editar insumo" : "Novo insumo"}</h2>
+      <label class="campo">Nome<input id="i-nome" value="${esc(v.nome)}" placeholder="Ex.: Nutella" required></label>
+      <div class="campos">
+        <label class="campo">Categoria<select id="i-cat">${Object.entries(CAT).map(([k, t]) => `<option value="${k}" ${k === v.categoria ? "selected" : ""}>${t}</option>`).join("")}</select></label>
+        <label class="campo">Unidade de medida<select id="i-un">${u.map((x) => `<option ${x === v.unidade ? "selected" : ""}>${x}</option>`).join("")}</select></label>
+      </div>
+      <div class="campos">
+        <label class="campo">Como você compra<input id="i-embn" value="${esc(v.embalagemNome)}" placeholder="pote, balde, pacote…"></label>
+        <label class="campo">Quanto vem (na unidade)<input id="i-embq" inputmode="decimal" value="${esc(String(v.embalagemQtd).replace(".", ","))}" placeholder="3000"></label>
+        <label class="campo">Preço da embalagem (R$)<input id="i-preco" inputmode="decimal" value="${esc(String(v.precoEmbalagem).replace(".", ","))}" placeholder="0,00"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="i-ctl" ${v.controla !== false ? "checked" : ""}> Controlar estoque deste item</label>
+      <div class="campos" id="i-estq">
+        <label class="campo">Estoque atual (contagem)<input id="i-est" inputmode="decimal" value="${esc(String(v.estoque ?? 0).replace(".", ","))}"></label>
+        <label class="campo">Estoque mínimo<input id="i-min" inputmode="decimal" value="${esc(String(v.minimo ?? 0).replace(".", ","))}"></label>
+      </div>
+      <p class="sub" id="i-info" style="margin:0"></p>
+      <div class="dlg__rodape">
+        ${i ? `<button class="btn btn--perigo" type="submit" value="excluir" style="margin-right:auto">Excluir</button>` : ""}
+        <button class="btn btn--linha" data-fechar type="button">Cancelar</button><button class="btn btn--marca" type="submit" value="salvar">Salvar</button></div>`,
+    async (btn) => {
+      if (btn && btn.value === "excluir") {
+        if (btn.dataset.confirma !== "1") { btn.dataset.confirma = "1"; btn.textContent = "Confirmar exclusão"; return false; }
+        await ok(sb.from("insumos").delete().eq("id", i.id)); await carregar(); toast("Insumo excluído"); return;
+      }
+      const nome = $("#i-nome").value.trim(); if (!nome) { toast("Dê um nome ao insumo"); return false; }
+      const d = { nome, categoria: $("#i-cat").value, unidade: $("#i-un").value, embalagemNome: $("#i-embn").value.trim(),
+        embalagemQtd: num($("#i-embq").value), precoEmbalagem: num($("#i-preco").value), controla: $("#i-ctl").checked,
+        estoque: num($("#i-est").value), minimo: num($("#i-min").value) };
+      if (i) {
+        const delta = d.estoque - (i.estoque || 0);
+        const { estoque, ...resto } = d;
+        await ok(sb.from("insumos").update({ ...paraBanco(resto), atualizado_em: new Date().toISOString() }).eq("id", i.id));
+        if (d.controla && Math.abs(delta) > 1e-9) {
+          S.ins[i.id] = { ...i, ...resto };
+          await aplicarDeltas({ [i.id]: delta }, { tipo: "ajuste", descricao: `Contagem de ${nome}` });
+        } else await carregar();
+        toast("Insumo atualizado");
+      } else {
+        let id = slug(nome); while (S.ins[id]) id += "-2";
+        await ok(sb.from("insumos").insert({ id, ...paraBanco(d) })); await carregar(); toast("Insumo cadastrado");
+      }
+    }, () => {
+      $("#i-estq").hidden = !$("#i-ctl").checked;
+      const q = num($("#i-embq").value), p = num($("#i-preco").value), un = $("#i-un").value;
+      $("#i-info").innerHTML = q > 0 && p > 0 ? `Custo por ${un}: <b class="num">${brl(p / q)}</b>${un === "g" ? ` · por kg: <b class="num">${brl((p / q) * 1000)}</b>` : ""}` : "";
+    });
+  }
+
+  // ---------- abas ----------
+  const ABAS = ["painel", "estoque", "receitas", "historico"];
+  function aba() {
+    const a = ABAS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "painel";
+    ABAS.forEach((x) => { $("#v-" + x).hidden = x !== a; });
+    $$(".abas a").forEach((l) => (l.dataset.aba === a ? l.setAttribute("aria-current", "page") : l.removeAttribute("aria-current")));
+  }
+  addEventListener("hashchange", aba); aba();
+  $("#filtros").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-f]"); if (!b) return; S.filtro = b.dataset.f;
+    $$("#filtros button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); renderEstoque();
+  });
+
+  // ---------- utilidades ----------
+  let tt;
+  function toast(t) { let el = $(".toast"); if (!el) { el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); document.body.appendChild(el); } el.textContent = t; clearTimeout(tt); tt = setTimeout(() => el.remove(), 2600); }
+  function falha(err) {
+    console.error(err);
+    const m = String((err && (err.message || err.code)) || "").toLowerCase();
+    toast(err && err.code === "42501" || m.includes("permiss") ? "Sem permissão. Seu e-mail precisa estar cadastrado na equipe."
+      : m.includes("jwt") || m.includes("session") ? "Sua sessão expirou. Entre de novo."
+      : "Não deu para salvar agora. Confira a internet e tente de novo.");
+  }
+  function travar() { ["#b-producao", "#b-compra", "#b-novo"].forEach((s) => ($(s).hidden = true)); render(); }
+  function aviso(t) { const a = $("#aviso"); a.textContent = t || ""; a.hidden = !t; }
+
+  // ---------- banco de dados (Supabase) ----------
+  const CFG = window.CARAMELLOS_SUPABASE || {};
+  let sb = null;
+  async function ok(p) { const { data, error } = await p; if (error) throw error; return data; }
+  const paraBanco = (d) => {
+    const m = { embalagemNome: "embalagem_nome", embalagemQtd: "embalagem_qtd", precoEmbalagem: "preco_embalagem" };
+    return Object.fromEntries(Object.entries(d).map(([k, v]) => [m[k] || k, v]));
+  };
+  const doBanco = (r) => ({ id: r.id, nome: r.nome, categoria: r.categoria, unidade: r.unidade, embalagemNome: r.embalagem_nome,
+    embalagemQtd: Number(r.embalagem_qtd), precoEmbalagem: Number(r.preco_embalagem), estoque: Number(r.estoque), minimo: Number(r.minimo), controla: r.controla });
+
+  async function carregar() {
+    const [a, b, c] = await Promise.all([
+      sb.from("insumos").select("*"),
+      sb.from("config").select("dados").eq("id", "fichas").maybeSingle(),
+      sb.from("movimentos").select("tipo,descricao,itens,valor,quando").order("quando", { ascending: false }).limit(60),
+    ]);
+    const err = a.error || b.error || c.error; if (err) throw err;
+    S.ins = {}; a.data.forEach((r) => { S.ins[r.id] = doBanco(r); });
+    S.fichas = b.data ? b.data.dados : null; if (!S.sujo) S.draft = null;
+    S.movs = c.data.map((m) => ({ ...m, valor: m.valor == null ? null : Number(m.valor) }));
+    S.okIns = S.okFic = true; aviso(""); render();
+  }
+
+  // ---------- login ----------
+  let modo = "entrar"; // entrar | esqueci | nova
+  function msgLogin(t, okMsg) { const m = $("#login-msg"); m.textContent = t || ""; m.hidden = !t; m.classList.toggle("entrada__msg--ok", !!okMsg); }
+  function telaLogin(m, t, okMsg) {
+    modo = m || "entrar";
+    $("#app").hidden = true; $("#login").hidden = false;
+    $("#l-email").hidden = modo === "nova"; $("#l-senha").hidden = modo !== "entrar"; $("#l-nova").hidden = modo !== "nova";
+    $("#login-btn").textContent = modo === "entrar" ? "Entrar" : modo === "esqueci" ? "Enviar link para criar nova senha" : "Salvar nova senha";
+    $("#login-esqueci").textContent = modo === "entrar" ? "Esqueci minha senha" : "Voltar para o login";
+    $("#login-esqueci").hidden = modo === "nova";
+    $("#login-sub").textContent = modo === "nova" ? "Crie sua nova senha." : modo === "esqueci" ? "Informe seu e-mail para receber o link." : "Estoque, receitas e custos. Entre com seu e-mail e senha.";
+    msgLogin(t, okMsg);
+    const f = modo === "nova" ? $("#login-nova") : $("#login-email"); if (f) f.focus();
+  }
+  async function entrar(sess) {
+    let eh = false;
+    try { eh = await ok(sb.rpc("eh_equipe")); } catch (e) { eh = false; }
+    if (!eh) { await sb.auth.signOut(); telaLogin("entrar", "Este e-mail não tem acesso ao painel. Fale com a administradora."); return; }
+    $("#login").hidden = true; $("#app").hidden = false; $("#quem").textContent = sess.user.email;
+    aviso("Carregando…");
+    try { await carregar(); } catch (e) { console.error(e); aviso("Não foi possível carregar os dados. Confira a internet e recarregue a página."); }
+  }
+  $("#login-esqueci").addEventListener("click", () => telaLogin(modo === "entrar" ? "esqueci" : "entrar"));
+  $("#form-login").addEventListener("submit", async (e) => {
+    e.preventDefault(); if (!sb) return;
+    const b = $("#login-btn"); b.disabled = true; msgLogin("");
+    const email = $("#login-email").value.trim();
+    try {
+      if (modo === "entrar") {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password: $("#login-senha").value });
+        if (error) { msgLogin("E-mail ou senha incorretos."); return; }
+        $("#login-senha").value = ""; await entrar(data.session);
+      } else if (modo === "esqueci") {
+        if (!email) { msgLogin("Digite seu e-mail."); return; }
+        await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/painel/" });
+        telaLogin("entrar", "Se o e-mail estiver cadastrado, você vai receber um link para criar a nova senha.", true);
+      } else {
+        const nova = $("#login-nova").value;
+        if (nova.length < 8) { msgLogin("A senha precisa ter pelo menos 8 caracteres."); return; }
+        const { data, error } = await sb.auth.updateUser({ password: nova });
+        if (error) { msgLogin("Não deu para salvar a senha. Peça um novo link."); return; }
+        $("#login-nova").value = ""; history.replaceState(null, "", location.pathname);
+        const s = (await sb.auth.getSession()).data.session; if (s) await entrar(s); else telaLogin("entrar", "Senha salva. Entre com ela.", true);
+      }
+    } catch (err) { console.error(err); msgLogin("Sem conexão. Tente de novo."); }
+    finally { b.disabled = false; }
+  });
+  $("#b-sair").addEventListener("click", async () => { await sb.auth.signOut(); telaLogin("entrar"); });
+
+  async function iniciar() {
+    if (!CFG.url || !CFG.chave || !window.supabase) { telaLogin("entrar", "O painel ainda não foi conectado ao banco de dados."); $("#login-btn").disabled = true; return; }
+    const recuperando = /type=(recovery|invite)/.test(location.hash);
+    sb = window.supabase.createClient(CFG.url, CFG.chave);
+    sb.auth.onAuthStateChange((ev) => { if (ev === "PASSWORD_RECOVERY") telaLogin("nova"); });
+    const { data } = await sb.auth.getSession();
+    if (recuperando && data.session) telaLogin("nova");
+    else if (data.session) await entrar(data.session);
+    else telaLogin("entrar");
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && !$("#app").hidden && !S.sujo && !dlg.open) carregar().catch(() => {});
+    });
+  }
+  iniciar();
+})();
+</script>
+</body>
+</html>
