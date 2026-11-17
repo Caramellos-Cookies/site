@@ -4,3 +4,6 @@
 .claude/
 # painel atual (versão claude.ai) — será substituído pela versão com Supabase na Fase 4
 painel/
+
+# anotações internas de implantação (ficam só no computador)
+GUIA-IMPLANTACAO.md
