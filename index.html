@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caramellos · Cookies artesanais em Itaquera</title>
+  <meta name="description" content="Cookies artesanais feitos sob encomenda em Itaquera, Zona Leste de São Paulo. Tradicional, Doce de Leite com Castanha-do-Pará e Nutella. Peça pelo WhatsApp!">
+  <meta name="theme-color" content="#db0817">
+  <meta property="og:title" content="Caramellos · Não é biscoito e nem bolacha, é Cookie!">
+  <meta property="og:description" content="Cookies artesanais sob encomenda na Zona Leste de SP.">
+  <meta property="og:image" content="img/cookie-doce-de-leite.jpg">
+  <link rel="icon" href="img/marca/mascote-adesivo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+  <!-- ============ CABEÇALHO ============ -->
+  <header class="topo" id="topo">
+    <div class="topo__in">
+      <a href="#inicio" class="marca" aria-label="Caramellos, início">
+        <img class="marca__mascote" src="img/marca/mascote-adesivo.svg" alt="" width="46" height="45">
+        <img class="marca__logo" src="img/marca/logo-creme.svg" alt="Caramellos" width="150" height="31">
+      </a>
+      <button class="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="menu" class="menu">
+        <a href="#sabores">Sabores</a>
+        <a href="#quem-faz">Quem faz</a>
+        <a href="#precos">Preços</a>
+        <a href="#encomendar">Como pedir</a>
+        <a href="#onde">Onde encontrar</a>
+        <a href="#encomendar" class="btn btn--creme btn--peq">Encomendar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HOME / HERO ============ -->
+    <section class="hero" id="inicio">
+      <div class="hero__in">
+        <div class="hero__txt">
+          <p class="etiqueta">🍪 Cookies artesanais · Itaquera, ZL</p>
+          <h1>Não é biscoito<br>e nem bolacha,<br><em>é Cookie!</em></h1>
+          <p class="hero__sub">
+            Cookies grandes, amanteigados e recheados, feitos à mão com ingredientes
+            selecionados aqui na Zona Leste. Tudo sob encomenda, fresquinho pra você.
+          </p>
+          <div class="hero__acoes">
+            <a href="#encomendar" class="btn btn--creme btn--grande">Faça sua encomenda</a>
+            <a href="#sabores" class="link-seta">Ver sabores →</a>
+          </div>
+          <ul class="hero__selos">
+            <li>Feito à mão</li>
+            <li>Produção local</li>
+            <li>Sob encomenda</li>
+          </ul>
+        </div>
+        <div class="hero__foto">
+          <div class="polaroid">
+            <img src="img/cookie-doce-de-leite.jpg" alt="Cookie de doce de leite com castanha-do-pará partido ao meio" width="538" height="663">
+          </div>
+          <img class="hero__selo" src="img/marca/selo-ok-creme.svg" alt="Selo Caramellos de aprovação" width="110" height="110">
+          <img class="hero__adesivo" src="img/marca/mascote-adesivo.svg" alt="Mascote da Caramellos" width="341" height="334">
+          <span class="balao">Oi! Tá com<br>vontade de doce?</span>
+        </div>
+      </div>
+      <svg class="onda" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 C 240 90 480 0 720 40 S 1200 80 1440 30 V80 H0Z"/></svg>
+    </section>
+
+    <!-- faixa animada -->
+    <div class="faixa" aria-hidden="true">
+      <div class="faixa__trilho">
+        <span>massa amanteigada</span><b>✦</b><span>recheio generoso</span><b>✦</b><span>feito em Itaquera</span><b>✦</b><span>peça por DM ou WhatsApp</span><b>✦</b>
+        <span>massa amanteigada</span><b>✦</b><span>recheio generoso</span><b>✦</b><span>feito em Itaquera</span><b>✦</b><span>peça por DM ou WhatsApp</span><b>✦</b>
+      </div>
+    </div>
+
+    <!-- ============ SABORES ============ -->
+    <section class="secao" id="sabores">
+      <div class="cab">
+        <p class="sobre">Nossos sabores</p>
+        <h2>Escolha o seu <span class="rabisco">favorito</span></h2>
+        <p class="cab__txt">Todos com a mesma base amanteigada que derrete na boca. Difícil é escolher um só.</p>
+      </div>
+      <div class="produtos" id="lista-produtos"><!-- preenchido por js/app.js --></div>
+    </section>
+
+    <!-- ============ QUEM FAZ ============ -->
+    <section class="secao secao--azulejo" id="quem-faz">
+      <div class="historia">
+        <div class="historia__img">
+          <img src="img/marca/mascote-adesivo.svg" alt="Ilustração da Irae, criadora da Caramellos" width="341" height="334">
+          <p class="assinatura">Irae Cueto<br><small>criadora da Caramellos</small></p>
+        </div>
+        <div class="historia__txt cartao">
+          <p class="sobre">Quem está por trás</p>
+          <h2>Oi! Eu sou a Irae 👋</h2>
+          <p>Sempre gostei de fazer doces. Meu primeiro foi um <strong>bolo de cenoura com cobertura de brigadeiro</strong> e, desde então, nunca mais parei.</p>
+          <p>Ao longo dos anos passei por vários "hiperfocos" da confeitaria: bolos, brigadeiros, brownies e muitas outras receitas.</p>
+          <p>Até que um dia resolvi fazer cookies simplesmente porque queria comer um doce diferente. Gostei tanto que continuei testando receitas e aperfeiçoando cada detalhe, até que <strong>nasceu a Caramellos</strong>.</p>
+          <p>Mais do que vender cookies, quero criar um produto de qualidade e construir uma marca reconhecida na Zona Leste de São Paulo, especialmente aqui em Itaquera.</p>
+          <blockquote>
+            Meu sonho é que, no futuro, a Caramellos ajude outras mulheres e pequenos empreendedores a gerar renda através da confeitaria.
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PREÇOS ============ -->
+    <section class="secao" id="precos">
+      <div class="cab">
+        <p class="sobre">Tabela de preços</p>
+        <img class="cab__selo" src="img/marca/selo-ok-vermelho.svg" alt="" width="72" height="72">
+        <h2>Quanto custa a felicidade?</h2>
+        <p class="cab__txt">Unidades, combos e kits para presentear. Para eventos, é só chamar.</p>
+      </div>
+      <div class="precos" id="tabela-precos"><!-- preenchido por js/app.js --></div>
+      <p class="aviso" id="aviso-precos"></p>
+    </section>
+
+    <!-- ============ COMO ENCOMENDAR ============ -->
+    <section class="secao secao--vermelha" id="encomendar">
+      <div class="cab cab--claro">
+        <p class="sobre">Como encomendar</p>
+        <h2>Do forno pra sua mão em 4 passos</h2>
+      </div>
+      <ol class="passos">
+        <li><span class="passos__n">1</span><h3>Escolha seus sabores</h3><p>Selecione os cookies que deseja aqui embaixo.</p></li>
+        <li><span class="passos__n">2</span><h3>Faça contato</h3><p>Fale direto comigo pelo WhatsApp.</p></li>
+        <li><span class="passos__n">3</span><h3>Confirme o pedido</h3><p>Alinhamos quantidade, data e forma de entrega.</p></li>
+        <li><span class="passos__n">4</span><h3>Receba seus cookies</h3><p>Retirada ou entrega, conforme disponibilidade.</p></li>
+      </ol>
+
+      <div class="montador cartao" id="montador">
+        <div class="montador__cab">
+          <img src="img/marca/mascote-adesivo.svg" alt="" width="64" height="63">
+          <div>
+            <h3>Monte seu pedido</h3>
+            <p>Escolha as quantidades e eu já recebo tudo certinho no WhatsApp.</p>
+          </div>
+        </div>
+        <div id="montador-itens" class="montador__itens"><!-- js --></div>
+        <div class="montador__rodape">
+          <p class="total">Total estimado <strong id="total">R$ 0,00</strong></p>
+          <a id="btn-pedido" class="btn btn--whats btn--grande" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3c-.2.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3 1.8.8 2.5.8 3.4.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg>
+            <span id="btn-pedido-txt">Pedir pelo WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ONDE ENCONTRAR ============ -->
+    <section class="secao" id="onde">
+      <div class="cab">
+        <p class="sobre">Onde encontrar</p>
+        <h2>Pertinho de você, na ZL</h2>
+      </div>
+      <div class="onde" id="onde-cards"><!-- js --></div>
+    </section>
+
+    <!-- ============ INSTAGRAM ============ -->
+    <section class="secao secao--creme2" id="instagram">
+      <div class="cab">
+        <p class="sobre">Redes sociais</p>
+        <h2>Bastidores no <a class="arroba" id="link-insta" href="#" target="_blank" rel="noopener">@caramellos.cookies</a></h2>
+      </div>
+      <div class="galeria" id="galeria"><!-- js --></div>
+      <div class="depoimentos" id="depoimentos"><!-- js --></div>
+      <p class="centro"><a class="btn btn--vermelho" id="btn-insta" href="#" target="_blank" rel="noopener">Seguir no Instagram</a></p>
+    </section>
+  </main>
+
+  <!-- ============ RODAPÉ ============ -->
+  <footer class="rodape">
+    <img class="rodape__mascote" src="img/marca/mascote-adesivo.svg" alt="" width="110" height="108">
+    <img class="rodape__logo" src="img/marca/logo-creme.svg" alt="Caramellos" width="240" height="49">
+    <p class="rodape__frase">Feito com manteiga, paciência<br>e muito amor em Itaquera ❤️</p>
+    <nav class="rodape__links">
+      <a id="rod-whats" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a id="rod-insta" href="#" target="_blank" rel="noopener">Instagram</a>
+      <a href="#precos">Preços</a>
+    </nav>
+    <p class="rodape__copy">© <span id="ano"></span> Caramellos · Cookies artesanais</p>
+  </footer>
+
+  <!-- botão flutuante -->
+  <a class="flutuante" id="flutuante" href="#" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <img src="img/marca/mascote-adesivo.svg" alt="" width="58" height="57">
+    <span>Peça já!</span>
+  </a>
+
+  <script src="js/dados.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

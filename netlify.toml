@@ -1,0 +1,41 @@
+# Configuração da hospedagem na Netlify (site estático, sem build)
+[build]
+  publish = "."
+
+# Redireciona www para o domínio principal
+[[redirects]]
+  from = "https://www.caramelloscookies.com.br/*"
+  to = "https://caramelloscookies.com.br/:splat"
+  status = 301
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# Documentos internos do projeto não ficam públicos no site
+[[redirects]]
+  from = "/README.md"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/GUIA-IMPLANTACAO.md"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404"
+  status = 404
+  force = true
