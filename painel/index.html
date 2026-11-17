@@ -784,6 +784,12 @@ dialog::backdrop { background: rgba(30, 10, 8, .45); }
   async function iniciar() {
     if (!CFG.url || !CFG.chave || !window.supabase) { telaLogin("entrar", "O painel ainda não foi conectado ao banco de dados."); $("#login-btn").disabled = true; return; }
     const recuperando = /type=(recovery|invite)/.test(location.hash);
+    if (/error_code=/.test(location.hash)) {
+      history.replaceState(null, "", location.pathname);
+      sb = window.supabase.createClient(CFG.url, CFG.chave);
+      telaLogin("esqueci", "Esse link expirou ou já foi usado. Digite seu e-mail para receber um novo.");
+      return;
+    }
     sb = window.supabase.createClient(CFG.url, CFG.chave);
     sb.auth.onAuthStateChange((ev) => { if (ev === "PASSWORD_RECOVERY") telaLogin("nova"); });
     const { data } = await sb.auth.getSession();
