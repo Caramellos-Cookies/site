@@ -80,8 +80,11 @@ drop policy if exists "equipe usa movimentos" on public.movimentos;
 create policy "equipe usa movimentos" on public.movimentos
   for all to authenticated using (public.eh_equipe()) with check (public.eh_equipe());
 
--- Visitantes sem login não acessam nada
+-- Visitantes sem login não acessam nada; usuários logados passam pelas regras acima
 revoke all on public.equipe, public.insumos, public.config, public.movimentos from anon;
+grant usage on schema public to authenticated;
+grant select on public.equipe to authenticated;
+grant select, insert, update, delete on public.insumos, public.config, public.movimentos to authenticated;
 
 -- ---------- Registrar fornada / compra / contagem de uma vez só ----------
 -- Soma os "deltas" ao estoque e grava o histórico na mesma transação,
