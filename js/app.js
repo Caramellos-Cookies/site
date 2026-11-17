@@ -99,6 +99,8 @@
         <p>${esc(g.texto)}</p>
         <ul>${g.itens.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
       </article>`).join("");
+    $("#corp-fotos").innerHTML = (C.fotos || []).map((f) => `
+      <figure class="faixa-fotos__item"><img src="${esc(f.foto)}" alt="${esc(f.alt || f.legenda)}" loading="lazy" width="900" height="1200"><figcaption>${esc(f.legenda)}</figcaption></figure>`).join("");
     $("#corp-min").textContent = C.minimo;
     $("#corp-prazo").textContent = C.antecedencia;
     $("#o-qtd").min = 1;

@@ -24,7 +24,7 @@ window.CARAMELLOS = {
       peso: "≈ 90g",
       preco: 12,
       selo: "O clássico",
-      foto: "img/cookie-tradicional-mao.jpg",
+      foto: "img/fotos/tradicional-flor-de-sal.jpg",
       itens: ["Massa amanteigada", "Gotas de chocolate meio amargo"]
     },
     {
@@ -33,7 +33,7 @@ window.CARAMELLOS = {
       peso: "≈ 100g · 80g de massa + 20g de recheio",
       preco: 12,
       selo: "Recheado",
-      foto: "img/cookie-doce-de-leite.jpg",
+      foto: "img/fotos/doce-de-leite-trio.jpg",
       itens: ["Massa amanteigada", "Recheio de doce de leite", "Castanha-do-pará"]
     },
     {
@@ -87,6 +87,11 @@ window.CARAMELLOS = {
   corporativo: {
     minimo: 20,                      // pedido mínimo (unidades)
     antecedencia: "5 dias úteis",    // prazo para encomendar
+    fotos: [
+      { foto: "img/fotos/fornada-bandeja.jpg", legenda: "Fornada saindo do forno", alt: "Bandeja cheia de cookies tradicionais recém-assados" },
+      { foto: "img/fotos/doce-de-leite-inteiro.jpg", legenda: "Doce de leite com castanha", alt: "Cookie de doce de leite coberto de castanha-do-pará picada" },
+      { foto: "img/fotos/tradicional-trio.jpg", legenda: "Tradicional com flor de sal", alt: "Três cookies tradicionais com pedaços de chocolate" }
+    ],
     segmentos: [
       {
         titulo: "Empresas",
@@ -117,9 +122,12 @@ window.CARAMELLOS = {
 
   // ---------- INSTAGRAM ----------
   galeria: [
-    { foto: "img/cookie-doce-de-leite.jpg", alt: "Cookie de doce de leite com castanha-do-pará partido ao meio" },
+    { foto: "img/fotos/tradicional-close.jpg", alt: "Cookies tradicionais com pedaços de chocolate e flor de sal" },
+    { foto: "img/cookie-doce-de-leite.jpg", alt: "Arte Pausa! com cookie de doce de leite com castanha-do-pará" },
+    { foto: "img/fotos/doce-de-leite-aberto.jpg", alt: "Cookie de doce de leite partido mostrando o recheio" },
     { foto: "img/lembretes-gentis.jpg", alt: "Cookie de chocolate sobre azulejos vermelhos com o texto Lembretes gentis para você" },
-    { foto: "img/cookie-tradicional-mao.jpg", alt: "Mão segurando um cookie tradicional com pedaços de chocolate" }
+    { foto: "img/fotos/fornada-bandeja-2.jpg", alt: "Bandeja de cookies tradicionais saindo do forno" },
+    { foto: "img/cookie-tradicional-mao.jpg", alt: "Mão segurando um cookie tradicional com o adesivo da Caramellos" }
   ],
 
   // ---------- FEEDBACKS DE CLIENTES ----------
