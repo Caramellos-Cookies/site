@@ -225,13 +225,22 @@
         </div>
       </article>`).join("");
     $("#corp-min").textContent = C.minimo;
-    $("#corp-prazo").textContent = C.antecedencia;
+    // eventos: o calendário só mostra datas a partir de hoje + dias de produção
+    const diasEvento = C.antecedenciaDias ?? 5;
+    const minEvento = hojeMais(diasEvento);
+    const dataBR = (iso) => new Date(iso + "T12:00").toLocaleDateString("pt-BR");
+    $("#corp-prazo").textContent = `${diasEvento} dias`;
+    $("#o-data").min = minEvento;
     $("#o-qtd").min = 1;
     $("#form-orcamento").addEventListener("submit", (e) => {
       e.preventDefault();
       const qtd = parseInt($("#o-qtd").value, 10) || 0;
       const aviso = $("#o-aviso");
       if (qtd && qtd < C.minimo) { aviso.textContent = `O pedido mínimo para eventos é de ${C.minimo} cookies. Para menos, use o "Monte seu pedido" logo abaixo.`; aviso.hidden = false; return; }
+      if ($("#o-data").value && $("#o-data").value < minEvento) {
+        aviso.textContent = `Para eventos, precisamos de ${diasEvento} dias para a produção. Escolha uma data a partir de ${dataBR(minEvento)}.`;
+        aviso.hidden = false; return;
+      }
       aviso.hidden = true;
       const data = $("#o-data").value ? new Date($("#o-data").value + "T12:00").toLocaleDateString("pt-BR") : "a combinar";
       const linhas = [

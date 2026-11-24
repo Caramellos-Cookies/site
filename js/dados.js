@@ -86,7 +86,7 @@ window.CARAMELLOS = {
   // Seção "Corporativo e festas". O formulário monta a mensagem do WhatsApp.
   corporativo: {
     minimo: 20,                      // pedido mínimo (unidades)
-    antecedencia: "5 dias úteis",    // prazo para encomendar
+    antecedenciaDias: 5,             // dias para produção: o calendário do orçamento só libera datas a partir daí
     // Encomendas já entregues (cases). "destaque" aparece como selo no cartão.
     encomendas: [
       {
