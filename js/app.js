@@ -3,7 +3,8 @@
   const $ = (s) => document.querySelector(s);
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  const whats = (msg) => `https://wa.me/${D.contato.whatsapp}?text=${encodeURIComponent(msg)}`;
+  // Usa o endereço direto do WhatsApp: o atalho wa.me estraga emojis (🍪 vira "�") ao redirecionar
+  const whats = (msg) => `https://api.whatsapp.com/send?phone=${D.contato.whatsapp}&text=${encodeURIComponent(msg)}`;
   const insta = `https://instagram.com/${D.contato.instagram}`;
 
   // ---------- links fixos ----------
