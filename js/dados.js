@@ -11,7 +11,7 @@ window.CARAMELLOS = {
     // Número do WhatsApp com DDI + DDD, só números. Ex.: "5511999998888"
     whatsapp: "5511965400995",
     instagram: "caramellos.cookies",
-    mensagemPadrao: "Oi, Irae! Vim pelo site e quero encomendar cookies 🍪"
+    mensagemPadrao: "Oi, Iraê! Vim pelo site e quero encomendar cookies 🍪"
   },
 
   // ---------- SABORES ----------
@@ -131,6 +131,20 @@ window.CARAMELLOS = {
         itens: ["Embalagem individual", "Adesivo com nome ou logo", "Cartãozinho com mensagem", "Cores do seu evento"]
       }
     ]
+  },
+
+  // ---------- FINALIZAR PEDIDO (popup do "Monte seu pedido") ----------
+  pedido: {
+    antecedenciaDias: 1,   // a data mais cedo que o cliente pode escolher (1 = a partir de amanhã)
+    periodos: [
+      { nome: "Manhã", horario: "9h às 12h", frase: "de manhã" },
+      { nome: "Tarde", horario: "13h às 18h", frase: "à tarde" },
+      { nome: "Noite", horario: "18h às 21h", frase: "à noite" }
+    ],
+    pagamentos: ["Pix", "Dinheiro", "Cartão"],
+    avisoEntrega: "A taxa de entrega é combinada no WhatsApp, conforme o bairro.",
+    avisoRetirada: "Retirada em Itaquera, com horário combinado no WhatsApp.",
+    despedida: "Fico no aguardo da confirmação. Até já! 🧡"
   },
 
   // ---------- ONDE ENCONTRAR ----------

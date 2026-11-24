@@ -66,12 +66,125 @@
       if (q) { total += q * p.preco; n += q; linhas.push(`• ${q}x ${p.nome}`); }
     });
     $("#total").textContent = brl(total);
-    $("#btn-pedido-txt").textContent = n ? `Pedir ${n} cookie${n > 1 ? "s" : ""} pelo WhatsApp` : "Pedir pelo WhatsApp";
-    const msg = n
-      ? `Oi, Irae! Vim pelo site e quero encomendar:\n${linhas.join("\n")}\nTotal estimado: ${brl(total)}\n\nPodemos combinar data e entrega?`
-      : D.contato.mensagemPadrao;
-    $("#btn-pedido").href = whats(msg);
+    $("#btn-pedido-txt").textContent = n ? `Finalizar pedido de ${n} cookie${n > 1 ? "s" : ""}` : "Pedir pelo WhatsApp";
+    $("#btn-pedido").href = whats(D.contato.mensagemPadrao);
   }
+
+  // ---------- finalizar pedido (popup) ----------
+  const PD = D.pedido || {};
+  const ck = $("#checkout"), ckForm = $("#ck-form");
+  const GUARDA = "caramellos-pedido";
+  const lerGuardado = () => { try { return JSON.parse(localStorage.getItem(GUARDA)) || {}; } catch (e) { return {}; } };
+  const guardar = (o) => { try { localStorage.setItem(GUARDA, JSON.stringify(o)); } catch (e) {} };
+  const hojeMais = (dias) => { const d = new Date(); d.setDate(d.getDate() + dias); return d.toLocaleDateString("sv-SE"); };
+  const tipo = () => (ckForm.querySelector('input[name="ck-tipo"]:checked') || {}).value;
+
+  $("#ck-periodo").innerHTML = (PD.periodos || []).map((p, i) => `<option value="${i}">${esc(p.nome)} (${esc(p.horario)})</option>`).join("");
+  $("#ck-pagamentos").insertAdjacentHTML("beforeend", (PD.pagamentos || []).map((p, i) =>
+    `<label><input type="radio" name="ck-pag" value="${esc(p)}"${i === 0 ? " checked" : ""}><span>${esc(p)}</span></label>`).join(""));
+  $("#ck-aviso-entrega").textContent = PD.avisoEntrega || "";
+  $("#ck-aviso-retirada").textContent = PD.avisoRetirada || "";
+
+  function itensPedido() {
+    return D.produtos.filter((p) => qtd[p.id]).map((p) => ({ nome: p.nome, q: qtd[p.id], sub: qtd[p.id] * p.preco }));
+  }
+  function trocarTipo() {
+    const ent = tipo() === "entrega";
+    $("#ck-endereco").hidden = !ent; $("#ck-aviso-retirada").hidden = ent;
+  }
+  ckForm.addEventListener("change", (e) => {
+    if (e.target.name === "ck-tipo") trocarTipo();
+    if (e.target.id === "ck-presente") { $("#ck-cartao-campo").hidden = !e.target.checked; if (e.target.checked) $("#ck-cartao").focus(); }
+  });
+
+  // CEP: máscara + busca do endereço (ViaCEP, serviço público gratuito)
+  let ultimoCep = "";
+  $("#ck-cep").addEventListener("input", async (e) => {
+    const dig = e.target.value.replace(/\D/g, "").slice(0, 8);
+    e.target.value = dig.length > 5 ? dig.slice(0, 5) + "-" + dig.slice(5) : dig;
+    const st = $("#ck-cep-status");
+    if (dig.length !== 8 || dig === ultimoCep) { if (dig.length < 8) st.textContent = ""; return; }
+    ultimoCep = dig; st.textContent = "Buscando endereço…";
+    try {
+      const r = await fetch(`https://viacep.com.br/ws/${dig}/json/`);
+      const j = await r.json();
+      if (j.erro) { st.textContent = "CEP não encontrado. Preencha o endereço abaixo."; return; }
+      $("#ck-rua").value = j.logradouro || $("#ck-rua").value;
+      $("#ck-bairro").value = j.bairro || $("#ck-bairro").value;
+      $("#ck-cidade").value = j.localidade ? `${j.localidade}/${j.uf}` : $("#ck-cidade").value;
+      st.textContent = "✓ Endereço encontrado";
+      $("#ck-numero").focus();
+    } catch (err) { st.textContent = "Não deu para buscar o CEP agora. Preencha o endereço abaixo."; }
+  });
+
+  function abrirCheckout() {
+    const its = itensPedido(), total = its.reduce((s, i) => s + i.sub, 0);
+    $("#ck-resumo").innerHTML = `<ul>${its.map((i) => `<li><span>${i.q}x ${esc(i.nome)}</span><b>${brl(i.sub)}</b></li>`).join("")}</ul>
+      <p><span>Total dos cookies</span><b>${brl(total)}</b></p>`;
+    const g = lerGuardado();
+    [["ck-nome", "nome"], ["ck-cep", "cep"], ["ck-rua", "rua"], ["ck-numero", "numero"], ["ck-compl", "compl"], ["ck-bairro", "bairro"], ["ck-cidade", "cidade"]]
+      .forEach(([id, k]) => { if (g[k] && !$("#" + id).value) $("#" + id).value = g[k]; });
+    if (g.tipo) { const r = ckForm.querySelector(`input[name="ck-tipo"][value="${g.tipo}"]`); if (r) r.checked = true; }
+    if (g.pag) { const r = ckForm.querySelector(`input[name="ck-pag"][value="${CSS.escape(g.pag)}"]`); if (r) r.checked = true; }
+    const min = hojeMais(PD.antecedenciaDias ?? 1);
+    $("#ck-data").min = min; if (!$("#ck-data").value || $("#ck-data").value < min) $("#ck-data").value = "";
+    trocarTipo(); $("#ck-erro").hidden = true;
+    ck.showModal();
+    if (!$("#ck-nome").value) $("#ck-nome").focus();
+  }
+  $("#btn-pedido").addEventListener("click", (e) => {
+    if (!itensPedido().length) return;          // sem cookies: abre a conversa normal
+    e.preventDefault(); abrirCheckout();
+  });
+  ck.addEventListener("click", (e) => {
+    if (e.target.closest("[data-fechar]") || e.target === ck) ck.close();
+  });
+
+  function montarMensagem(v) {
+    const its = itensPedido(), total = its.reduce((s, i) => s + i.sub, 0);
+    const per = (PD.periodos || [])[v.periodo] || {};
+    const dia = new Date(v.data + "T12:00").toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" });
+    const end = [`${v.rua}, ${v.numero}${v.compl ? ", " + v.compl : ""}`, v.bairro, v.cidade, v.cep && "CEP " + v.cep].filter(Boolean).join(" · ");
+    return [
+      "Oi, Iraê! Tudo bem? 😊",
+      `Aqui é ${v.nome}, vi os cookies no site e quero fazer uma encomenda:`,
+      "",
+      ...its.map((i) => `🍪 ${i.q}x ${i.nome} · ${brl(i.sub)}`),
+      `*Total dos cookies: ${brl(total)}*${v.tipo === "entrega" ? " (+ entrega a combinar)" : ""}`,
+      "",
+      v.tipo === "entrega" ? `📦 *Entrega:* ${end}` : "🛍️ *Retirada:* vou retirar com você",
+      `📅 *Para:* ${dia}, ${per.frase || ""} (${per.horario || ""})`,
+      `💳 *Pagamento:* ${v.pag}`,
+      v.presente && (v.cartao ? `🎁 *É presente!* Mensagem do cartão: "${v.cartao}"` : "🎁 *É presente!*"),
+      v.obs && `📝 *Obs.:* ${v.obs}`,
+      "",
+      PD.despedida || "Fico no aguardo da confirmação!"
+    ].filter((l) => typeof l === "string").join("\n").replace(/\n{3,}/g, "\n\n");
+  }
+
+  ckForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = {
+      nome: $("#ck-nome").value.trim(), tipo: tipo(), cep: $("#ck-cep").value.trim(), rua: $("#ck-rua").value.trim(),
+      numero: $("#ck-numero").value.trim(), compl: $("#ck-compl").value.trim(), bairro: $("#ck-bairro").value.trim(),
+      cidade: $("#ck-cidade").value.trim(), data: $("#ck-data").value, periodo: Number($("#ck-periodo").value),
+      pag: (ckForm.querySelector('input[name="ck-pag"]:checked') || {}).value || "", presente: $("#ck-presente").checked,
+      cartao: $("#ck-cartao").value.trim(), obs: $("#ck-obs").value.trim()
+    };
+    const falta = [];
+    if (!v.nome) falta.push("seu nome");
+    if (v.tipo === "entrega" && (!v.rua || !v.numero || !v.bairro)) falta.push("o endereço (rua, número e bairro)");
+    if (!v.data) falta.push("a data");
+    else if (v.data < $("#ck-data").min) falta.push(`uma data a partir de ${new Date($("#ck-data").min + "T12:00").toLocaleDateString("pt-BR")}`);
+    const erro = $("#ck-erro");
+    if (falta.length) { erro.textContent = "Falta preencher " + falta.join(", ") + "."; erro.hidden = false; return; }
+    erro.hidden = true;
+    guardar({ nome: v.nome, tipo: v.tipo, cep: v.cep, rua: v.rua, numero: v.numero, compl: v.compl, bairro: v.bairro, cidade: v.cidade, pag: v.pag });
+    const url = whats(montarMensagem(v));
+    const w = window.open(url, "_blank", "noopener");
+    if (!w) location.href = url;
+    ck.close();
+  });
 
   $("#montador-itens").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-d]");
@@ -122,7 +235,7 @@
       aviso.hidden = true;
       const data = $("#o-data").value ? new Date($("#o-data").value + "T12:00").toLocaleDateString("pt-BR") : "a combinar";
       const linhas = [
-        "Oi, Irae! Vim pelo site e quero um orçamento para evento 🍪",
+        "Oi, Iraê! Vim pelo site e quero um orçamento para evento 🍪",
         `• Tipo: ${$("#o-tipo").value}`,
         `• Quantidade: ${qtd || "a definir"} cookies`,
         `• Data: ${data}`,

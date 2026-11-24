@@ -94,12 +94,12 @@
     <section class="secao secao--azulejo" id="quem-faz">
       <div class="historia">
         <div class="historia__img">
-          <img src="img/marca/mascote-adesivo.svg" alt="Ilustração da Irae, criadora da Caramellos" width="341" height="334">
-          <p class="assinatura">Irae Cueto<br><small>criadora da Caramellos</small></p>
+          <img src="img/marca/mascote-adesivo.svg" alt="Ilustração da Iraê, criadora da Caramellos" width="341" height="334">
+          <p class="assinatura">Iraê Cueto<br><small>criadora da Caramellos</small></p>
         </div>
         <div class="historia__txt cartao">
           <p class="sobre">Quem está por trás</p>
-          <h2>Oi! Eu sou a Irae 👋</h2>
+          <h2>Oi! Eu sou a Iraê 👋</h2>
           <p>Sempre gostei de fazer doces. Meu primeiro foi um <strong>bolo de cenoura com cobertura de brigadeiro</strong> e, desde então, nunca mais parei.</p>
           <p>Ao longo dos anos passei por vários "hiperfocos" da confeitaria: bolos, brigadeiros, brownies e muitas outras receitas.</p>
           <p>Até que um dia resolvi fazer cookies simplesmente porque queria comer um doce diferente. Gostei tanto que continuei testando receitas e aperfeiçoando cada detalhe, até que <strong>nasceu a Caramellos</strong>.</p>
@@ -252,6 +252,92 @@
     <img src="img/marca/mascote-adesivo.svg" alt="" width="58" height="57">
     <span>Peça já!</span>
   </a>
+
+  <!-- popup: finalizar pedido -->
+  <dialog class="checkout" id="checkout" aria-labelledby="ck-titulo">
+    <form class="checkout__form" id="ck-form" method="dialog" novalidate>
+      <div class="checkout__topo">
+        <img src="img/marca/mascote-adesivo.svg" alt="" width="52" height="51">
+        <div>
+          <h2 id="ck-titulo">Quase lá!</h2>
+          <p>Preencha os dados e o pedido vai prontinho para o WhatsApp da Iraê.</p>
+        </div>
+        <button type="button" class="checkout__fechar" data-fechar aria-label="Fechar">×</button>
+      </div>
+
+      <div class="checkout__resumo" id="ck-resumo"></div>
+
+      <label class="campo-site">Seu nome
+        <input id="ck-nome" type="text" autocomplete="name" placeholder="Nome e sobrenome" required>
+      </label>
+
+      <fieldset class="escolha">
+        <legend>Como você quer receber?</legend>
+        <label><input type="radio" name="ck-tipo" value="entrega" checked><span>🛵 Entrega</span></label>
+        <label><input type="radio" name="ck-tipo" value="retirada"><span>🛍️ Retirada</span></label>
+      </fieldset>
+
+      <div id="ck-endereco" class="checkout__grupo">
+        <div class="campo-dupla campo-dupla--cep">
+          <label class="campo-site">CEP
+            <input id="ck-cep" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9">
+          </label>
+          <p class="checkout__cep" id="ck-cep-status" aria-live="polite"></p>
+        </div>
+        <label class="campo-site">Rua
+          <input id="ck-rua" type="text" autocomplete="address-line1" placeholder="Rua, avenida…">
+        </label>
+        <div class="campo-dupla">
+          <label class="campo-site">Número
+            <input id="ck-numero" type="text" inputmode="numeric" placeholder="123">
+          </label>
+          <label class="campo-site">Complemento
+            <input id="ck-compl" type="text" autocomplete="address-line2" placeholder="Apto, bloco, referência">
+          </label>
+        </div>
+        <div class="campo-dupla">
+          <label class="campo-site">Bairro
+            <input id="ck-bairro" type="text" placeholder="Bairro">
+          </label>
+          <label class="campo-site">Cidade
+            <input id="ck-cidade" type="text" autocomplete="address-level2" value="São Paulo/SP">
+          </label>
+        </div>
+        <p class="checkout__aviso" id="ck-aviso-entrega"></p>
+      </div>
+      <p class="checkout__aviso" id="ck-aviso-retirada" hidden></p>
+
+      <div class="campo-dupla">
+        <label class="campo-site">Para quando?
+          <input id="ck-data" type="date" required>
+        </label>
+        <label class="campo-site">Período
+          <select id="ck-periodo"></select>
+        </label>
+      </div>
+
+      <fieldset class="escolha" id="ck-pagamentos">
+        <legend>Forma de pagamento</legend>
+      </fieldset>
+
+      <label class="check-site"><input type="checkbox" id="ck-presente"> 🎁 É para presente</label>
+      <label class="campo-site" id="ck-cartao-campo" hidden>Mensagem do cartãozinho
+        <input id="ck-cartao" type="text" maxlength="140" placeholder="Ex.: Feliz aniversário, Bia!">
+      </label>
+
+      <label class="campo-site">Observações (opcional)
+        <textarea id="ck-obs" rows="2" maxlength="300" placeholder="Alergias, portaria, horário específico…"></textarea>
+      </label>
+
+      <p class="checkout__erro" id="ck-erro" role="alert" hidden></p>
+      <p class="checkout__privacidade">🔒 Seus dados não ficam guardados em nenhum servidor: vão só para a conversa no WhatsApp.</p>
+
+      <div class="checkout__acoes">
+        <button type="button" class="btn btn--linha" data-fechar>Voltar</button>
+        <button type="submit" class="btn btn--whats btn--grande">Enviar pedido pelo WhatsApp</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="js/dados.js"></script>
   <script src="js/app.js"></script>
