@@ -307,11 +307,11 @@
       el.style.setProperty("--atraso", irmaos.indexOf(el) * passo + "ms");
       (estilo === "cortina" ? ioSecao : io).observe(el);
     });
-    marcar(".produto", "pop", 110);                                              // Sabores
+    marcar(".produto", "pop", 220);                                              // Sabores
     marcar(".cab h2", "titulo", 0);                                              // títulos das seções
     marcar("#quem-faz, #encomendar, .rodape", "cortina", 0);                     // seções vermelhas
     marcar(".cab__selo, .orcamento__txt > img", "carimbo", 0);                   // selos
-    marcar(".precos__grupo, .segmento, .case, .orcamento", "sobe", 120);         // Preços, Empresas e festas
-    marcar(".galeria__item, .passos li, .onde__card, .montador, .historia__txt, .balao-dep", "sobe", 80);
+    marcar(".precos__grupo, .segmento, .case, .orcamento", "sobe", 200);         // Preços, Empresas e festas
+    marcar(".galeria__item, .passos li, .onde__card, .montador, .historia__txt, .balao-dep", "sobe", 150);
   }
 })();

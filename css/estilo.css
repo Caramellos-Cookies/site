@@ -458,14 +458,14 @@ p { margin: 0 0 1em; }
 .anima [data-anim]:not([data-anim="cortina"]):not(.animou) { opacity: 0; }
 
 /* 1. sobe em cascata */
-.anima [data-anim="sobe"].animou { animation: anim-sobe .6s cubic-bezier(.2,.7,.2,1) var(--atraso, 0ms) backwards; }
-@keyframes anim-sobe { from { opacity: 0; transform: translateY(24px); } }
+.anima [data-anim="sobe"].animou { animation: anim-sobe 1.1s cubic-bezier(.22,.61,.36,1) var(--atraso, 0ms) backwards; }
+@keyframes anim-sobe { from { opacity: 0; transform: translateY(32px); } }
 
 /* 2. pop de cookie */
-.anima [data-anim="pop"].animou { animation: anim-pop .6s cubic-bezier(.3,1.5,.5,1) var(--atraso, 0ms) backwards; }
+.anima [data-anim="pop"].animou { animation: anim-pop 1.2s cubic-bezier(.25,.8,.35,1) var(--atraso, 0ms) backwards; }
 @keyframes anim-pop {
-  0% { opacity: 0; transform: scale(.85) rotate(-5deg); }
-  70% { opacity: 1; transform: scale(1.04) rotate(1.5deg); }
+  0% { opacity: 0; transform: translateY(20px) scale(.92) rotate(-3deg); }
+  55% { opacity: 1; transform: translateY(0) scale(1.015) rotate(.6deg); }
 }
 
 /* 3. cortina (seções vermelhas): uma faixa vermelho-escuro sobe e revela a seção */
@@ -475,18 +475,18 @@ p { margin: 0 0 1em; }
   height: min(100%, 100vh);   /* só a primeira tela da seção: em seções altas não cobre tudo */
   background: var(--vermelho-esc); clip-path: inset(0 0 0 0);
 }
-.anima [data-anim="cortina"].animou::after { animation: anim-cortina .7s cubic-bezier(.7,0,.2,1) forwards; }
+.anima [data-anim="cortina"].animou::after { animation: anim-cortina 1.4s cubic-bezier(.65,0,.35,1) forwards; }
 @keyframes anim-cortina { to { clip-path: inset(0 0 100% 0); } }
 
 /* 4. carimbo do selo */
-.anima [data-anim="carimbo"].animou { animation: anim-carimbo .55s cubic-bezier(.3,1.5,.5,1) backwards; }
-.anima .cab__selo[data-anim].animou { animation: anim-carimbo .55s cubic-bezier(.3,1.5,.5,1) backwards, pulsa 3s .6s ease-in-out infinite; }
-@keyframes anim-carimbo { 0% { opacity: 0; transform: scale(2.2) rotate(-25deg); } }
+.anima [data-anim="carimbo"].animou { animation: anim-carimbo 1s cubic-bezier(.34,1.25,.64,1) backwards; }
+.anima .cab__selo[data-anim].animou { animation: anim-carimbo 1s cubic-bezier(.34,1.25,.64,1) backwards, pulsa 3s 1.1s ease-in-out infinite; }
+@keyframes anim-carimbo { 0% { opacity: 0; transform: scale(1.6) rotate(-15deg); } }
 
 /* 5. título sobe e o rabisco se desenha */
-.anima [data-anim="titulo"].animou { animation: anim-sobe .5s cubic-bezier(.2,.7,.2,1) backwards; }
+.anima [data-anim="titulo"].animou { animation: anim-sobe 1s cubic-bezier(.22,.61,.36,1) backwards; }
 .anima [data-anim="titulo"] .rabisco::after { transform: scaleX(0); transform-origin: left; }
-.anima [data-anim="titulo"].animou .rabisco::after { transform: scaleX(1); transition: transform .6s .35s ease-out; }
+.anima [data-anim="titulo"].animou .rabisco::after { transform: scaleX(1); transition: transform 1.1s .6s cubic-bezier(.45,0,.25,1); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
