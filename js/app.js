@@ -281,7 +281,12 @@
 
   // ---------- cabeçalho com sombra ao rolar ----------
   const topo = $("#topo");
-  addEventListener("scroll", () => topo.classList.toggle("rolado", scrollY > 10), { passive: true });
+  const subir = $("#subir"), hero = $(".hero");
+  const aoRolar = () => {
+    topo.classList.toggle("rolado", scrollY > 10);
+    subir.classList.toggle("visivel", scrollY > hero.offsetHeight);   // aparece depois da primeira tela
+  };
+  addEventListener("scroll", aoRolar, { passive: true }); aoRolar();
 
   // ---------- revelar ao rolar ----------
   if ("IntersectionObserver" in window) {

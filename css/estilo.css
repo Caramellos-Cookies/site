@@ -440,6 +440,18 @@ p { margin: 0 0 1em; }
 .flutuante img { width: 52px; height: auto; margin: -14px 0 -4px -6px; filter: drop-shadow(0 3px 4px rgba(0,0,0,.25)); }
 .flutuante:hover { transform: scale(1.05) rotate(-2deg); }
 
+/* ---------- botão voltar ao início (centro, acima do selo da Netlify) ---------- */
+.subir {
+  position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 59;
+  display: inline-flex; align-items: center; gap: 4px; padding: 8px 16px 8px 12px; border-radius: 999px;
+  background: var(--creme); color: var(--vermelho); text-decoration: none; font: 700 .95rem var(--titulo);
+  box-shadow: 0 8px 22px -8px rgba(59, 35, 27, .55), inset 0 0 0 2px var(--vermelho);
+  opacity: 0; pointer-events: none; transform: translate(-50%, 12px); transition: opacity .25s, transform .25s;
+}
+.subir.visivel { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+.subir:hover { background: var(--vermelho); color: var(--creme); }
+@media (max-width: 420px) { .subir span { display: none; } .subir { padding: 10px; } }
+
 /* ---------- animação de entrada ---------- */
 .revela { opacity: 0; translate: 0 24px; transition: opacity .6s, translate .6s; }
 .revela.visivel { opacity: 1; translate: 0 0; }
