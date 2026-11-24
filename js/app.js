@@ -288,13 +288,30 @@
   };
   addEventListener("scroll", aoRolar, { passive: true }); aoRolar();
 
-  // ---------- revelar ao rolar ----------
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver((ents) => ents.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add("visivel"); io.unobserve(en.target); }
-    }), { threshold: 0.12 });
-    document.querySelectorAll(".produto, .cartao, .passos li, .galeria__item").forEach((el) => {
-      el.classList.add("revela"); io.observe(el);
+  // ---------- transições ao entrar nas seções (uma vez só) ----------
+  // Sem JavaScript ou com "reduzir movimento" ligado, tudo aparece direto, sem efeito.
+  const reduzMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if ("IntersectionObserver" in window && !reduzMovimento) {
+    document.documentElement.classList.add("anima");
+    const aoVer = (ents, obs) => ents.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add("animou"); obs.unobserve(en.target); }
     });
+    const io = new IntersectionObserver(aoVer, { threshold: 0.15, rootMargin: "0px 0px -5% 0px" });
+    // seções inteiras (cortina): disparam assim que o topo entra no último quarto da tela
+    const ioSecao = new IntersectionObserver(aoVer, { threshold: 0, rootMargin: "0px 0px -25% 0px" });
+    // marca os elementos com o estilo e um atraso em cascata entre irmãos
+    const marcar = (sel, estilo, passo) => document.querySelectorAll(sel).forEach((el) => {
+      if (el.dataset.anim) return;
+      const irmaos = [...el.parentElement.children].filter((c) => c.matches(sel));
+      el.dataset.anim = estilo;
+      el.style.setProperty("--atraso", irmaos.indexOf(el) * passo + "ms");
+      (estilo === "cortina" ? ioSecao : io).observe(el);
+    });
+    marcar(".produto", "pop", 110);                                              // Sabores
+    marcar(".cab h2", "titulo", 0);                                              // títulos das seções
+    marcar("#quem-faz, #encomendar, .rodape", "cortina", 0);                     // seções vermelhas
+    marcar(".cab__selo, .orcamento__txt > img", "carimbo", 0);                   // selos
+    marcar(".precos__grupo, .segmento, .case, .orcamento", "sobe", 120);         // Preços, Empresas e festas
+    marcar(".galeria__item, .passos li, .onde__card, .montador, .historia__txt, .balao-dep", "sobe", 80);
   }
 })();
