@@ -9,7 +9,7 @@
 window.CARAMELLOS = {
   contato: {
     // Número do WhatsApp com DDI + DDD, só números. Ex.: "5511999998888"
-    whatsapp: "5511900000000",
+    whatsapp: "5511965400995",
     instagram: "caramellos.cookies",
     mensagemPadrao: "Oi, Irae! Vim pelo site e quero encomendar cookies 🍪"
   },
