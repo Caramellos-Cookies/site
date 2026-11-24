@@ -266,7 +266,7 @@
         <img src="img/marca/mascote-adesivo.svg" alt="" width="52" height="51">
         <div>
           <h2 id="ck-titulo">Quase lá!</h2>
-          <p>Preencha os dados e o pedido vai prontinho para o WhatsApp da Iraê.</p>
+          <p id="ck-sub">Preencha os dados e o pedido vai prontinho para o WhatsApp da Iraê.</p>
         </div>
         <button type="button" class="checkout__fechar" data-fechar aria-label="Fechar">×</button>
       </div>
@@ -314,7 +314,7 @@
       <p class="checkout__aviso" id="ck-aviso-retirada" hidden></p>
 
       <div class="campo-dupla">
-        <label class="campo-site">Para quando?
+        <label class="campo-site"><span id="ck-data-rotulo">Para quando?</span>
           <input id="ck-data" type="date" required>
         </label>
         <label class="campo-site">Período
@@ -326,7 +326,7 @@
         <legend>Forma de pagamento</legend>
       </fieldset>
 
-      <label class="check-site"><input type="checkbox" id="ck-presente"> 🎁 É para presente</label>
+      <label class="check-site" id="ck-presente-campo"><input type="checkbox" id="ck-presente"> 🎁 É para presente</label>
       <label class="campo-site" id="ck-cartao-campo" hidden>Mensagem do cartãozinho
         <input id="ck-cartao" type="text" maxlength="140" placeholder="Ex.: Feliz aniversário, Bia!">
       </label>
@@ -340,7 +340,7 @@
 
       <div class="checkout__acoes">
         <button type="button" class="btn btn--linha" data-fechar>Voltar</button>
-        <button type="submit" class="btn btn--whats btn--grande">Enviar pedido pelo WhatsApp</button>
+        <button type="submit" class="btn btn--whats btn--grande" id="ck-enviar">Enviar pedido pelo WhatsApp</button>
       </div>
     </form>
   </dialog>

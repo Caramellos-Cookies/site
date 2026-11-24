@@ -117,17 +117,37 @@
     } catch (err) { st.textContent = "Não deu para buscar o CEP agora. Preencha o endereço abaixo."; }
   });
 
-  function abrirCheckout() {
-    const its = itensPedido(), total = its.reduce((s, i) => s + i.sub, 0);
-    $("#ck-resumo").innerHTML = `<ul>${its.map((i) => `<li><span>${i.q}x ${esc(i.nome)}</span><b>${brl(i.sub)}</b></li>`).join("")}</ul>
-      <p><span>Total dos cookies</span><b>${brl(total)}</b></p>`;
+  // modo "pedido" (Monte seu pedido) ou "evento" (orçamento de Empresas e festas)
+  let evento = null;
+  function abrirCheckout(ev) {
+    evento = ev || null;
+    if (evento) {
+      $("#ck-resumo").innerHTML = `<ul>
+        <li><span>Evento</span><b>${esc(evento.tipo)}</b></li>
+        <li><span>Quantidade</span><b>${evento.qtd ? evento.qtd + " cookies" : "a definir"}</b></li></ul>`;
+      $("#ck-sub").textContent = "Só faltam os dados de entrega para a Iraê montar o seu orçamento.";
+      $("#ck-data-rotulo").textContent = "Data do evento";
+      $("#ck-enviar").textContent = "Pedir orçamento pelo WhatsApp";
+      if (evento.nome) $("#ck-nome").value = evento.nome;
+    } else {
+      const its = itensPedido(), total = its.reduce((s, i) => s + i.sub, 0);
+      $("#ck-resumo").innerHTML = `<ul>${its.map((i) => `<li><span>${i.q}x ${esc(i.nome)}</span><b>${brl(i.sub)}</b></li>`).join("")}</ul>
+        <p><span>Total dos cookies</span><b>${brl(total)}</b></p>`;
+      $("#ck-sub").textContent = "Preencha os dados e o pedido vai prontinho para o WhatsApp da Iraê.";
+      $("#ck-data-rotulo").textContent = "Para quando?";
+      $("#ck-enviar").textContent = "Enviar pedido pelo WhatsApp";
+    }
+    $("#ck-presente-campo").hidden = !!evento;
+    if (evento) { $("#ck-presente").checked = false; $("#ck-cartao-campo").hidden = true; }
     const g = lerGuardado();
     [["ck-nome", "nome"], ["ck-cep", "cep"], ["ck-rua", "rua"], ["ck-numero", "numero"], ["ck-compl", "compl"], ["ck-bairro", "bairro"], ["ck-cidade", "cidade"]]
       .forEach(([id, k]) => { if (g[k] && !$("#" + id).value) $("#" + id).value = g[k]; });
     if (g.tipo) { const r = ckForm.querySelector(`input[name="ck-tipo"][value="${g.tipo}"]`); if (r) r.checked = true; }
     if (g.pag) { const r = ckForm.querySelector(`input[name="ck-pag"][value="${CSS.escape(g.pag)}"]`); if (r) r.checked = true; }
-    const min = hojeMais(PD.antecedenciaDias ?? 1);
-    $("#ck-data").min = min; if (!$("#ck-data").value || $("#ck-data").value < min) $("#ck-data").value = "";
+    const min = hojeMais(evento ? (D.corporativo?.antecedenciaDias ?? 5) : (PD.antecedenciaDias ?? 1));
+    $("#ck-data").min = min;
+    if (evento && evento.data) $("#ck-data").value = evento.data;
+    if (!$("#ck-data").value || $("#ck-data").value < min) $("#ck-data").value = "";
     trocarTipo(); $("#ck-erro").hidden = true;
     ck.showModal();
     if (!$("#ck-nome").value) $("#ck-nome").focus();
@@ -145,6 +165,22 @@
     const per = (PD.periodos || [])[v.periodo] || {};
     const dia = new Date(v.data + "T12:00").toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" });
     const end = [`${v.rua}, ${v.numero}${v.compl ? ", " + v.compl : ""}`, v.bairro, v.cidade, v.cep && "CEP " + v.cep].filter(Boolean).join(" · ");
+    if (evento) {
+      const detalhes = [evento.obs, v.obs].filter(Boolean).join(" · ");
+      return [
+        "Oi, Iraê! Tudo bem? 😊",
+        `Aqui é ${v.nome}, vi no site e quero um orçamento para um evento:`,
+        "",
+        `🎉 *Evento:* ${evento.tipo}`,
+        `🍪 *Quantidade:* ${evento.qtd ? evento.qtd + " cookies" : "a definir"}`,
+        `📅 *Data:* ${dia}, ${per.frase || ""} (${per.horario || ""})`,
+        v.tipo === "entrega" ? `📦 *Entrega:* ${end}` : "🛍️ *Retirada:* vou retirar com você",
+        `💳 *Pagamento:* ${v.pag}`,
+        detalhes && `📝 *Detalhes:* ${detalhes}`,
+        "",
+        "Fico no aguardo do orçamento. Até já! 🧡"
+      ].filter((l) => typeof l === "string").join("\n").replace(/\n{3,}/g, "\n\n");
+    }
     return [
       "Oi, Iraê! Tudo bem? 😊",
       `Aqui é ${v.nome}, vi os cookies no site e quero fazer uma encomenda:`,
@@ -242,16 +278,7 @@
         aviso.hidden = false; return;
       }
       aviso.hidden = true;
-      const data = $("#o-data").value ? new Date($("#o-data").value + "T12:00").toLocaleDateString("pt-BR") : "a combinar";
-      const linhas = [
-        "Oi, Iraê! Vim pelo site e quero um orçamento para evento 🍪",
-        `• Tipo: ${$("#o-tipo").value}`,
-        `• Quantidade: ${qtd || "a definir"} cookies`,
-        `• Data: ${data}`,
-        $("#o-nome").value.trim() && `• Nome/empresa: ${$("#o-nome").value.trim()}`,
-        $("#o-obs").value.trim() && `• Detalhes: ${$("#o-obs").value.trim()}`
-      ].filter(Boolean);
-      window.open(whats(linhas.join("\n")), "_blank", "noopener");
+      abrirCheckout({ tipo: $("#o-tipo").value, qtd, data: $("#o-data").value, nome: $("#o-nome").value.trim(), obs: $("#o-obs").value.trim() });
     });
   }
 
